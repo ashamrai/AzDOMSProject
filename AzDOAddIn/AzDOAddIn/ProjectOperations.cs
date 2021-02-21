@@ -40,6 +40,8 @@ namespace AzDOAddIn
 
         static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
         static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }
+        static public string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
+        static public string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
 
 
         static int CheckDocProperty(string propertyName)
@@ -49,6 +51,13 @@ namespace AzDOAddIn
                     return i;
 
             return 0;
+        }
+
+        static string GetDocProperty(string propertyName)
+        {
+            int propIndex = CheckDocProperty(propertyName);
+            if (propIndex > 0) return DocPropeties[propIndex].Value;
+            return "";
         }
 
         static public void LinkToTeamProject()
@@ -88,6 +97,8 @@ namespace AzDOAddIn
             AddFieldToView(PlanCoreColumns.WIId.PjValue, PlanCoreColumns.WIId.Name);
             AddFieldToView(PlanCoreColumns.WIType.PjValue, PlanCoreColumns.WIType.Name);
             AddFieldToView(PlanCoreColumns.WIState.PjValue, PlanCoreColumns.WIState.Name);
+            AddFieldToView(PlanCoreColumns.WIArea.PjValue, PlanCoreColumns.WIArea.Name);
+            AddFieldToView(PlanCoreColumns.WIIteration.PjValue, PlanCoreColumns.WIIteration.Name);
         }
 
         private static void AddFieldToView(MSProject.PjField fieldPjValue, string fieldViewName)
@@ -110,6 +121,63 @@ namespace AzDOAddIn
                 AppObj.TableEdit(ActiveProject.CurrentTable, true, Type.Missing, Type.Missing,
                                   Type.Missing, Type.Missing, fieldViewName, Type.Missing, 30, 2, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 AppObj.TableApply(ActiveProject.CurrentTable);
+            }
+        }
+
+        public static void AddWorkItemsToPlan(List<int> wiIds)
+        {
+            foreach(int wiId in wiIds)
+            {
+                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, "");
+
+                MSProject.Task projectTask = AddWorkItem(workItem);
+            }
+        }
+
+        private static MSProject.Task AddWorkItem(RestApiClasses.WorkItem workItem)
+        {
+            MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName]);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIId);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIRev);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIState);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIRev);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIType);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
+            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIArea);
+
+            return projectTask;
+        }
+
+        private static void AddFiledToTask(MSProject.Task projectTask, RestApiClasses.WorkItem workItem, FieldPlanMapping fieldPlanMapping)
+        {
+            switch (fieldPlanMapping.AzDORefName)
+            {
+                case WorkItemSystemFileds.ID: 
+                    projectTask.SetField(fieldPlanMapping.PjValue, workItem.id.ToString());
+                    break;
+                case WorkItemSystemFileds.Rev:
+                    projectTask.SetField(fieldPlanMapping.PjValue, workItem.rev.ToString());
+                    break;
+                case WorkItemSystemFileds.Iteration:
+                    AddClassificationFieldToPlan(projectTask, workItem, fieldPlanMapping);
+                    break;
+                case WorkItemSystemFileds.Area:
+                    AddClassificationFieldToPlan(projectTask, workItem, fieldPlanMapping);
+                    break;
+                default:
+                    projectTask.SetField(fieldPlanMapping.PjValue, workItem.fields[fieldPlanMapping.AzDORefName].ToString());
+                    break;
+            }
+        }
+
+        private static void AddClassificationFieldToPlan(MSProject.Task projectTask, RestApiClasses.WorkItem workItem, FieldPlanMapping fieldPlanMapping)
+        {
+            string teamProject = workItem.fields[WorkItemSystemFileds.TeamProject].ToString();
+            string classificationField = workItem.fields[fieldPlanMapping.AzDORefName].ToString();
+            if (teamProject != classificationField)
+            {
+                string fieldValue = classificationField.Remove(0, teamProject.Length + 1);
+                projectTask.SetField(fieldPlanMapping.PjValue, fieldValue);
             }
         }
     }

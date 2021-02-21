@@ -25,7 +25,16 @@ namespace AzDOAddIn
 
         private void btn_UpdatePlan_Click(object sender, RibbonControlEventArgs e)
         {
-            //var wi = AzDORestApiHelper.GetWorkItem(AzDORestApiHelper.ORG, "TFSAgile", 689, AzDORestApiHelper.PAT);
+            
+        }
+
+        private void btnGetWorkItems_Click(object sender, RibbonControlEventArgs e)
+        {
+            Forms.GetWorkItemsForm getWorkItemsForm = new Forms.GetWorkItemsForm();
+            if (getWorkItemsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ProjectOperations.AddWorkItemsToPlan(getWorkItemsForm.WiIds);
+            }
         }
     }
 }

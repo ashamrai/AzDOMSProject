@@ -18,6 +18,7 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string Iteration = "System.IterationPath";
         public const string Area = "System.AreaPath";
         public const string Rev = "System.Rev";
+        public const string TeamProject = "System.TeamProject";
     }
 
     public static class PlanDocProperties

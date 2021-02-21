@@ -30,8 +30,17 @@ namespace AzDOAddIn
 
         public static WorkItem GetWorkItem(string azDoUrl, string teamProject, int wiId, string pat)
         {
-            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitems/{2}?api-version={3}", azDoUrl, teamProject, wiId, RestApiVersion);
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitems/{2}?$expand=relations&api-version={3}", azDoUrl, teamProject, wiId, RestApiVersion);
             return InvokeRestApiRequest<WorkItem>(RequestMethod.GET, requestUrl, "", pat);
+        }
+
+        public static WorkItemsResponse GetWorkItems(string azDoUrl, string teamProject, string wiIds, string pat, string fields = "\"System.Id\",\"System.Title\",\"System.WorkItemType\"")
+        {
+            string requestBody = string.Format("\"ids\":[{0}],\"fields\":[{1}]", wiIds, fields);
+            //string requestBody = string.Format("\"ids\":[{0}],\"fields\":[{1}], \"$expand\":\"relations\"", wiIds, fields);
+            requestBody = "{" + requestBody + "}";
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitemsbatch?api-version={2}", azDoUrl, teamProject, RestApiVersion);
+            return InvokeRestApiRequest<WorkItemsResponse>(RequestMethod.POST, requestUrl, requestBody, pat);
         }
 
         public static WorkItemTypeResponse GetWorkItemTypes(string azDoUrl, string teamProject, string pat)
@@ -42,11 +51,11 @@ namespace AzDOAddIn
 
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {
-            HttpClient httpClient = null;            
             HttpResponseMessage requestResponse = null;
             string responceContent = null;
 
-            if (pat != "")            
+            HttpClient httpClient;
+            if (pat != "")
             {
                 httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", pat))));
@@ -63,6 +72,9 @@ namespace AzDOAddIn
             {
                 case RequestMethod.GET:
                     requestResponse = httpClient.GetAsync(requestUrl).Result;
+                    break; 
+                case RequestMethod.POST:
+                    requestResponse = httpClient.PostAsync(requestUrl, new StringContent(requestBody, Encoding.UTF8, "application/json")).Result;
                     break;
             }
 
