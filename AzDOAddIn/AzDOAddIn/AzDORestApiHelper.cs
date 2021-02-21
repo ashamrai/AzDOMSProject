@@ -13,9 +13,6 @@ namespace AzDOAddIn
 {
     public static class AzDORestApiHelper
     {
-        public static string PAT { get { return ""; } }
-        public static string ORG { get { return ""; } }
-
         static class RequestMethod
         {
             public const string GET = "GET";
@@ -37,16 +34,32 @@ namespace AzDOAddIn
             return InvokeRestApiRequest<WorkItem>(RequestMethod.GET, requestUrl, "", pat);
         }
 
+        public static WorkItemTypeResponse GetWorkItemTypes(string azDoUrl, string teamProject, string pat)
+        {
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitemtypes?api-version={2}", azDoUrl, teamProject, RestApiVersion);
+            return InvokeRestApiRequest<WorkItemTypeResponse>(RequestMethod.GET, requestUrl, "", pat);
+        }
+
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {
-            HttpClient httpClient = new HttpClient();            
+            HttpClient httpClient = null;            
             HttpResponseMessage requestResponse = null;
-            string responceContent = null;           
+            string responceContent = null;
 
-            if (pat != "") 
+            if (pat != "")            
+            {
+                httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", "", pat))));
+            }
+            else
+            {
+                HttpClientHandler httpClientHandler = new HttpClientHandler();
+                httpClientHandler.UseDefaultCredentials = true;
+                httpClient = new HttpClient(httpClientHandler);
+            }
 
-            switch(requestMethod.ToUpper())
+
+            switch (requestMethod.ToUpper())
             {
                 case RequestMethod.GET:
                     requestResponse = httpClient.GetAsync(requestUrl).Result;

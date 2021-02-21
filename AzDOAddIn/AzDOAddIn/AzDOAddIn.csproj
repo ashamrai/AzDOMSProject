@@ -166,12 +166,21 @@
     <Compile Include="Forms\WndLinkToTeamProject.Designer.cs">
       <DependentUpon>WndLinkToTeamProject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WorkItemTypes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WorkItemTypes.Designer.cs">
+      <DependentUpon>WorkItemTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Forms\WndLinkToTeamProject.resx">
       <DependentUpon>WndLinkToTeamProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WorkItemTypes.resx">
+      <DependentUpon>WorkItemTypes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -199,6 +208,7 @@
     </Compile>
     <Compile Include="RestApiClasses\TeamProjectReference.cs" />
     <Compile Include="RestApiClasses\WorkItem.cs" />
+    <Compile Include="RestApiClasses\WorkItemType.cs" />
     <Compile Include="RibbonPanel.cs">
       <SubType>Component</SubType>
     </Compile>

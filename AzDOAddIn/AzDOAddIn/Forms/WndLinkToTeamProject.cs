@@ -29,7 +29,7 @@ namespace AzDOAddIn.Forms
 
         private void btn_GetTeamProjects_Click(object sender, EventArgs e)
         {
-            var projects = AzDORestApiHelper.GetTeamProjects(AzDORestApiHelper.ORG, AzDORestApiHelper.PAT);
+            var projects = AzDORestApiHelper.GetTeamProjects(Url, PAT);
 
             cmdBox_TeamProjects.Items.Clear();
 

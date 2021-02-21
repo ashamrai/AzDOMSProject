@@ -25,7 +25,7 @@ namespace AzDOAddIn
 
         private void btn_UpdatePlan_Click(object sender, RibbonControlEventArgs e)
         {
-            var wi = AzDORestApiHelper.GetWorkItem(AzDORestApiHelper.ORG, "TFSAgile", 689, AzDORestApiHelper.PAT);
+            //var wi = AzDORestApiHelper.GetWorkItem(AzDORestApiHelper.ORG, "TFSAgile", 689, AzDORestApiHelper.PAT);
         }
     }
 }

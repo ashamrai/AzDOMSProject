@@ -59,6 +59,17 @@ namespace AzDOAddIn
             {
                 SaveDocSetting(PlanDocProperties.AzDoUrl, linkForm.Url);
                 SaveDocSetting(PlanDocProperties.AzDoTeamProject, linkForm.TeamProject);
+
+                Forms.WorkItemTypes workItemTypesForm = new Forms.WorkItemTypes();
+
+                var workItemTypes = AzDORestApiHelper.GetWorkItemTypes(linkForm.Url, linkForm.TeamProject, linkForm.PAT);
+
+                foreach(var item in workItemTypes.WorkItemTypes)
+                    workItemTypesForm.AddWorkItemTypeToList(item.name);
+
+                if (workItemTypesForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    SaveDocSetting(PlanDocProperties.AzDoWorkItemTypes, workItemTypesForm.SelectedItems());
+
             }
         }
 

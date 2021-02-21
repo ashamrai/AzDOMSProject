@@ -24,6 +24,7 @@ namespace AzDOAddIn.AzDOAddInSettings
     {
         public const string AzDoUrl = "Azure DevOps Service URL";
         public const string AzDoTeamProject = "Azure DevOps Team Project";
+        public const string AzDoWorkItemTypes = "Azure DevOps Work Item Types";
     }
 
     public static class PlanCoreColumns
