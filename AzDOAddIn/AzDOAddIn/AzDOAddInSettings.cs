@@ -19,6 +19,7 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string Area = "System.AreaPath";
         public const string Rev = "System.Rev";
         public const string TeamProject = "System.TeamProject";
+        public const string Parent = "System.Parent";
     }
 
     public static class PlanDocProperties

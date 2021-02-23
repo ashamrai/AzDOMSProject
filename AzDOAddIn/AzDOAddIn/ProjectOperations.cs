@@ -125,11 +125,14 @@ namespace AzDOAddIn
 
         private static MSProject.Task AddWorkItem(RestApiClasses.WorkItem workItem, MSProject.Task parentTask = null)
         {
+            if (GetPlanTaskByWorkItemId(workItem.id) != null) return null;
+
+            if (parentTask == null) parentTask = FindParentInPlan(workItem);
+
             int taskInsertPosition = GetTaskChildInsertPosition(workItem, parentTask);
 
             MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName], 
-                (taskInsertPosition == 0)? Type.Missing : taskInsertPosition);
-            
+                (taskInsertPosition == 0)? Type.Missing : taskInsertPosition);            
 
             AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIId);
             AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIRev);
@@ -147,6 +150,21 @@ namespace AzDOAddIn
                     projectTask.OutlineOutdent();
 
             return projectTask;
+        }
+
+        private static MSProject.Task FindParentInPlan(RestApiClasses.WorkItem workItem)
+        {
+            if (!workItem.fields.ContainsKey(WorkItemSystemFileds.Parent)) return null;
+
+            return GetPlanTaskByWorkItemId((long)workItem.fields[WorkItemSystemFileds.Parent]);
+        }
+
+        private static MSProject.Task GetPlanTaskByWorkItemId(long id)
+        {
+            for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
+                if (id == GetIntFieldValue(ActiveProject.Tasks[i], PlanCoreColumns.WIId.PjValue)) return ActiveProject.Tasks[i];
+
+            return null;
         }
 
         private static int GetTaskChildInsertPosition(RestApiClasses.WorkItem workItem, MSProject.Task parentTask)
