@@ -12,9 +12,9 @@ namespace AzDOAddIn
 {
     static class ProjectOperations
     {
-        static public MSProject.Application AppObj { get; set; }
+        internal static MSProject.Application AppObj { get; set; }
 
-        static public bool TeamProjectLinked
+        internal static bool TeamProjectLinked
         {
             get
             {
@@ -39,6 +39,7 @@ namespace AzDOAddIn
         }        
 
         static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
+        static MSProject.Task SelectedTask { get { return (AppObj.ActiveSelection.Tasks == null) ? null : AppObj.ActiveSelection.Tasks[1]; } }
         static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }
         static public string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
         static public string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
@@ -60,7 +61,7 @@ namespace AzDOAddIn
             return "";
         }
 
-        static public void LinkToTeamProject()
+        internal static void LinkToTeamProject()
         {           
             Forms.WndLinkToTeamProject linkForm = new Forms.WndLinkToTeamProject();
 
@@ -92,39 +93,7 @@ namespace AzDOAddIn
                 DocPropeties.Add(settingName, false, Type: MsoDocProperties.msoPropertyTypeString, Value: settingValue);
         }
 
-        internal static void UpdateView()
-        {
-            AddFieldToView(PlanCoreColumns.WIId.PjValue, PlanCoreColumns.WIId.Name);
-            AddFieldToView(PlanCoreColumns.WIType.PjValue, PlanCoreColumns.WIType.Name);
-            AddFieldToView(PlanCoreColumns.WIState.PjValue, PlanCoreColumns.WIState.Name);
-            AddFieldToView(PlanCoreColumns.WIArea.PjValue, PlanCoreColumns.WIArea.Name);
-            AddFieldToView(PlanCoreColumns.WIIteration.PjValue, PlanCoreColumns.WIIteration.Name);
-        }
-
-        private static void AddFieldToView(MSProject.PjField fieldPjValue, string fieldViewName)
-        {
-            if (AppObj.CustomFieldGetName((MSProject.PjCustomField)fieldPjValue) != fieldViewName)
-            {
-                AppObj.CustomFieldRename((MSProject.PjCustomField)fieldPjValue, fieldViewName, Type.Missing);
-                AppObj.TableEdit(ActiveProject.CurrentTable, true, Type.Missing, Type.Missing,
-                                  Type.Missing, Type.Missing, fieldViewName, Type.Missing, 30, 2, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                AppObj.TableApply(ActiveProject.CurrentTable);
-            }
-            else
-            {
-                foreach (MSProject.TableField _tableField in ActiveProject.TaskTables[ActiveProject.CurrentTable].TableFields)
-                {
-                    if (_tableField.Field == fieldPjValue)
-                        return;
-                }
-
-                AppObj.TableEdit(ActiveProject.CurrentTable, true, Type.Missing, Type.Missing,
-                                  Type.Missing, Type.Missing, fieldViewName, Type.Missing, 30, 2, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                AppObj.TableApply(ActiveProject.CurrentTable);
-            }
-        }
-
-        public static void AddWorkItemsToPlan(List<int> wiIds)
+        internal static void AddWorkItemsToPlan(List<int> wiIds)
         {
             foreach(int wiId in wiIds)
             {
@@ -134,21 +103,63 @@ namespace AzDOAddIn
             }
         }
 
-        private static MSProject.Task AddWorkItem(RestApiClasses.WorkItem workItem)
+        internal static void ImportChilds()
         {
-            MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName]);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIId);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIRev);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIState);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIRev);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIType);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
-            AddFiledToTask(projectTask, workItem, PlanCoreColumns.WIArea);
+            var currentTask = SelectedTask;
+
+            if (currentTask == null) return;
+
+            int currentWiId = GetIntFieldValue(currentTask, PlanCoreColumns.WIId.PjValue);
+
+            if (currentWiId == 0) return;
+
+            var workItems = AzDORestApiHelper.GetChildWorkItems(ActiveOrgUrl, ActiveTeamProject, currentWiId, "");
+
+            if (workItems.Count == 0) return;
+
+            foreach(var workItem in workItems)
+            {
+                AddWorkItem(workItem, currentTask);
+            }
+        }
+
+        private static MSProject.Task AddWorkItem(RestApiClasses.WorkItem workItem, MSProject.Task parentTask = null)
+        {
+            int taskInsertPosition = GetTaskChildInsertPosition(workItem, parentTask);
+
+            MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName], 
+                (taskInsertPosition == 0)? Type.Missing : taskInsertPosition);
+            
+
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIId);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIRev);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIState);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIReason);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIType);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIArea);
+
+            if (parentTask != null)
+                while (projectTask.OutlineLevel <= parentTask.OutlineLevel)
+                    projectTask.OutlineIndent();
+            else
+                while (projectTask.OutlineLevel != 1)
+                    projectTask.OutlineOutdent();
 
             return projectTask;
         }
 
-        private static void AddFiledToTask(MSProject.Task projectTask, RestApiClasses.WorkItem workItem, FieldPlanMapping fieldPlanMapping)
+        private static int GetTaskChildInsertPosition(RestApiClasses.WorkItem workItem, MSProject.Task parentTask)
+        {
+            if (parentTask == null) return 0;
+
+            if (parentTask.ID + parentTask.OutlineChildren.Count < ActiveProject.Tasks.Count)
+                return parentTask.ID + parentTask.OutlineChildren.Count + 1;
+
+            return 0;
+        }
+
+        private static void AddCoreFieldToTask(MSProject.Task projectTask, RestApiClasses.WorkItem workItem, FieldPlanMapping fieldPlanMapping)
         {
             switch (fieldPlanMapping.AzDORefName)
             {
@@ -170,6 +181,22 @@ namespace AzDOAddIn
             }
         }
 
+        private static string GetStringFieldValue(MSProject.Task projectTask, MSProject.PjField pjField)
+        {
+            return projectTask.GetField(pjField);
+        }
+
+        private static int GetIntFieldValue(MSProject.Task projectTask, MSProject.PjField pjField)
+        {
+            string fieldStringValue = GetStringFieldValue(projectTask, pjField);
+
+            int fieldIntValue;
+
+            if (int.TryParse(fieldStringValue, out fieldIntValue)) return fieldIntValue;
+
+            return 0;
+        }
+
         private static void AddClassificationFieldToPlan(MSProject.Task projectTask, RestApiClasses.WorkItem workItem, FieldPlanMapping fieldPlanMapping)
         {
             string teamProject = workItem.fields[WorkItemSystemFileds.TeamProject].ToString();
@@ -180,5 +207,41 @@ namespace AzDOAddIn
                 projectTask.SetField(fieldPlanMapping.PjValue, fieldValue);
             }
         }
+
+        #region project table configs
+
+        internal static void UpdateView()
+        {
+            AddFieldToView(PlanCoreColumns.WIId.PjValue, PlanCoreColumns.WIId.Name, 10);
+            AddFieldToView(PlanCoreColumns.WIType.PjValue, PlanCoreColumns.WIType.Name, 20);
+            AddFieldToView(PlanCoreColumns.WIState.PjValue, PlanCoreColumns.WIState.Name, 15);
+            AddFieldToView(PlanCoreColumns.WIArea.PjValue, PlanCoreColumns.WIArea.Name);
+            AddFieldToView(PlanCoreColumns.WIIteration.PjValue, PlanCoreColumns.WIIteration.Name);
+        }
+
+        private static void AddFieldToView(MSProject.PjField fieldPjValue, string fieldViewName, int ColumnWidth = 30)
+        {
+            if (AppObj.CustomFieldGetName((MSProject.PjCustomField)fieldPjValue) != fieldViewName)
+            {
+                AppObj.CustomFieldRename((MSProject.PjCustomField)fieldPjValue, fieldViewName, Type.Missing);
+                AppObj.TableEdit(ActiveProject.CurrentTable, true, Type.Missing, Type.Missing,
+                                  Type.Missing, Type.Missing, fieldViewName, Type.Missing, ColumnWidth, 0, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                AppObj.TableApply(ActiveProject.CurrentTable);
+            }
+            else
+            {
+                foreach (MSProject.TableField _tableField in ActiveProject.TaskTables[ActiveProject.CurrentTable].TableFields)
+                {
+                    if (_tableField.Field == fieldPjValue)
+                        return;
+                }
+
+                AppObj.TableEdit(ActiveProject.CurrentTable, true, Type.Missing, Type.Missing,
+                                  Type.Missing, Type.Missing, fieldViewName, Type.Missing, ColumnWidth, 0, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                AppObj.TableApply(ActiveProject.CurrentTable);
+            }
+        }
+
+        #endregion
     }
 }

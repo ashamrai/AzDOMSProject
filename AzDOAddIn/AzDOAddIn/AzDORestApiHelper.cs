@@ -48,6 +48,28 @@ namespace AzDOAddIn
             string requestUrl = string.Format("{0}/{1}/_apis/wit/workitemtypes?api-version={2}", azDoUrl, teamProject, RestApiVersion);
             return InvokeRestApiRequest<WorkItemTypeResponse>(RequestMethod.GET, requestUrl, "", pat);
         }
+        public static WorkItemQueryResult GetWiqlResult(string azDoUrl, string teamProject, string wiqlText, string pat)
+        {
+            string requestBody = string.Format("\"query\":\"{0}\"", wiqlText);
+            requestBody = "{" + requestBody + "}";
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/wiql?api-version={2}", azDoUrl, teamProject, RestApiVersion);
+            return InvokeRestApiRequest<WorkItemQueryResult>(RequestMethod.POST, requestUrl, requestBody, pat);
+        }
+
+        public static List<WorkItem> GetChildWorkItems(string azDoUrl, string teamProject, int wiId, string pat)
+        {
+            List<WorkItem> childWorkItems = new List<WorkItem>();
+
+            string queryText = string.Format("SELECT [System.Id] FROM WorkItemLinks WHERE ([Source].[System.Id] = {0}) And ([System.Links.LinkType] = 'System.LinkTypes.Hierarchy-Forward') ORDER BY [System.Id] mode(MayContain)", wiId);
+
+            var result = GetWiqlResult(azDoUrl, teamProject, queryText, "");
+
+            if (result.workItemRelations != null && result.workItemRelations.Count() > 0)
+                foreach (var relation in result.workItemRelations)
+                    if (relation.source != null) childWorkItems.Add(GetWorkItem(azDoUrl, teamProject, relation.target.id, pat));
+
+            return childWorkItems;
+        }
 
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {

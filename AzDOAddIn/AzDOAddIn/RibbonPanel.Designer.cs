@@ -39,9 +39,10 @@
             this.btn_LinkToTeamProject = this.Factory.CreateRibbonButton();
             this.btn_PublishWorkItems = this.Factory.CreateRibbonButton();
             this.btn_UpdatePlan = this.Factory.CreateRibbonButton();
+            this.btnGetWorkItems = this.Factory.CreateRibbonButton();
             this.group_View = this.Factory.CreateRibbonGroup();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
-            this.btnGetWorkItems = this.Factory.CreateRibbonButton();
+            this.btnImportChilds = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group_Sync.SuspendLayout();
             this.group_View.SuspendLayout();
@@ -61,6 +62,7 @@
             this.group_Sync.Items.Add(this.btn_PublishWorkItems);
             this.group_Sync.Items.Add(this.btn_UpdatePlan);
             this.group_Sync.Items.Add(this.btnGetWorkItems);
+            this.group_Sync.Items.Add(this.btnImportChilds);
             this.group_Sync.Label = "Sync Work Items";
             this.group_Sync.Name = "group_Sync";
             // 
@@ -87,6 +89,12 @@
             this.btn_UpdatePlan.ShowImage = true;
             this.btn_UpdatePlan.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_UpdatePlan_Click);
             // 
+            // btnGetWorkItems
+            // 
+            this.btnGetWorkItems.Label = "Get Work Items";
+            this.btnGetWorkItems.Name = "btnGetWorkItems";
+            this.btnGetWorkItems.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnGetWorkItems_Click);
+            // 
             // group_View
             // 
             this.group_View.Items.Add(this.btn_AddColumns);
@@ -99,11 +107,11 @@
             this.btn_AddColumns.Name = "btn_AddColumns";
             this.btn_AddColumns.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_AddColumns_Click);
             // 
-            // btnGetWorkItems
+            // btnImportChilds
             // 
-            this.btnGetWorkItems.Label = "Get Work Items";
-            this.btnGetWorkItems.Name = "btnGetWorkItems";
-            this.btnGetWorkItems.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnGetWorkItems_Click);
+            this.btnImportChilds.Label = "Import Childs";
+            this.btnImportChilds.Name = "btnImportChilds";
+            this.btnImportChilds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImportChilds_Click);
             // 
             // RibbonPanel
             // 
@@ -131,6 +139,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group_View;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_AddColumns;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetWorkItems;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportChilds;
     }
 
     partial class ThisRibbonCollection

@@ -36,5 +36,10 @@ namespace AzDOAddIn
                 ProjectOperations.AddWorkItemsToPlan(getWorkItemsForm.WiIds);
             }
         }
+
+        private void btnImportChilds_Click(object sender, RibbonControlEventArgs e)
+        {
+            ProjectOperations.ImportChilds();
+        }
     }
 }

@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="RestApiClasses\TeamProjectReference.cs" />
     <Compile Include="RestApiClasses\WorkItem.cs" />
+    <Compile Include="RestApiClasses\WorkItemQueryResult.cs" />
     <Compile Include="RestApiClasses\WorkItemType.cs" />
     <Compile Include="RibbonPanel.cs">
       <SubType>Component</SubType>
