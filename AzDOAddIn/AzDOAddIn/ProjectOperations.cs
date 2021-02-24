@@ -235,6 +235,32 @@ namespace AzDOAddIn
             AddFieldToView(PlanCoreColumns.WIState.PjValue, PlanCoreColumns.WIState.Name, 15);
             AddFieldToView(PlanCoreColumns.WIArea.PjValue, PlanCoreColumns.WIArea.Name);
             AddFieldToView(PlanCoreColumns.WIIteration.PjValue, PlanCoreColumns.WIIteration.Name);
+
+            AddLookUpWorkItemTypes();
+        }
+
+        private static void AddLookUpWorkItemTypes()
+        {
+            AppObj.CustomFieldValueList((MSProject.PjCustomField)PlanCoreColumns.WIType.PjValue, Type.Missing, Type.Missing, true, false, false);
+
+            AppObj.CustomFieldProperties((MSProject.PjCustomField)PlanCoreColumns.WIType.PjValue, MSProject.PjCustomFieldAttribute.pjFieldAttributeValueList, MSProject.PjSummaryCalc.pjCalcNone);
+
+            string mappedWorkItemsString = GetDocProperty(PlanDocProperties.AzDoWorkItemTypes);
+
+            if (mappedWorkItemsString == "") return;
+
+            string[] mappedWorkItems = mappedWorkItemsString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> existingValues = new List<string>();
+
+            for (int i = 1; i < 100; i++)
+            {
+                try { existingValues.Add(AppObj.CustomFieldValueListGetItem((MSProject.PjCustomField)PlanCoreColumns.WIType.PjValue, MSProject.PjValueListItem.pjValueListValue, i)); }
+                catch (Exception) { break; }
+            }
+
+            foreach (var mappedWorkItem in mappedWorkItems)
+                if (!existingValues.Contains(mappedWorkItem)) AppObj.CustomFieldValueListAdd((MSProject.PjCustomField)PlanCoreColumns.WIType.PjValue, mappedWorkItem);            
         }
 
         private static void AddFieldToView(MSProject.PjField fieldPjValue, string fieldViewName, int ColumnWidth = 30)
