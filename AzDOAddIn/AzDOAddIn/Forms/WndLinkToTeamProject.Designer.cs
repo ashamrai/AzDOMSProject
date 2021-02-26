@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.txtBox_Url = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtBox_PAT = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -37,6 +36,7 @@
             this.btn_GetTeamProjects = new System.Windows.Forms.Button();
             this.btn_OK = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
+            this.cmdAzDoUrl = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -47,13 +47,6 @@
             this.label1.Size = new System.Drawing.Size(225, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Azure DevOps Service/Server Collection URL";
-            // 
-            // txtBox_Url
-            // 
-            this.txtBox_Url.Location = new System.Drawing.Point(255, 15);
-            this.txtBox_Url.Name = "txtBox_Url";
-            this.txtBox_Url.Size = new System.Drawing.Size(368, 20);
-            this.txtBox_Url.TabIndex = 1;
             // 
             // label2
             // 
@@ -119,6 +112,15 @@
             this.btn_Cancel.Text = "Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
             // 
+            // cmdAzDoUrl
+            // 
+            this.cmdAzDoUrl.FormattingEnabled = true;
+            this.cmdAzDoUrl.Location = new System.Drawing.Point(255, 14);
+            this.cmdAzDoUrl.Name = "cmdAzDoUrl";
+            this.cmdAzDoUrl.Size = new System.Drawing.Size(368, 21);
+            this.cmdAzDoUrl.TabIndex = 9;
+            this.cmdAzDoUrl.SelectedIndexChanged += new System.EventHandler(this.cmdAzDoUrl_SelectedIndexChanged);
+            // 
             // WndLinkToTeamProject
             // 
             this.AcceptButton = this.btn_OK;
@@ -127,6 +129,7 @@
             this.CancelButton = this.btn_Cancel;
             this.ClientSize = new System.Drawing.Size(636, 147);
             this.ControlBox = false;
+            this.Controls.Add(this.cmdAzDoUrl);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_OK);
             this.Controls.Add(this.btn_GetTeamProjects);
@@ -134,7 +137,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtBox_PAT);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtBox_Url);
             this.Controls.Add(this.label1);
             this.Name = "WndLinkToTeamProject";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -147,7 +149,6 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtBox_Url;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtBox_PAT;
         private System.Windows.Forms.Label label3;
@@ -155,5 +156,6 @@
         private System.Windows.Forms.Button btn_GetTeamProjects;
         private System.Windows.Forms.Button btn_OK;
         private System.Windows.Forms.Button btn_Cancel;
+        private System.Windows.Forms.ComboBox cmdAzDoUrl;
     }
 }

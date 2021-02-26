@@ -178,6 +178,7 @@
     <Compile Include="Forms\WorkItemTypes.Designer.cs">
       <DependentUpon>WorkItemTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatHelper.cs" />
     <Compile Include="ProjectOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -204,6 +205,9 @@
     <EmbeddedResource Include="RibbonPanel.resx">
       <DependentUpon>RibbonPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="AzDOAddIn.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="AzDOAddIn_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

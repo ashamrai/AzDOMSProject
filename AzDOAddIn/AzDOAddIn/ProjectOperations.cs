@@ -40,9 +40,10 @@ namespace AzDOAddIn
 
         static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
         static MSProject.Task SelectedTask { get { return (AppObj.ActiveSelection.Tasks == null) ? null : AppObj.ActiveSelection.Tasks[1]; } }
-        static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }
-        static public string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
-        static public string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
+        static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }        
+        static internal string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
+        static internal string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
+        static internal string ActivePAT { get { return PatHelper.GetPat(ActiveOrgUrl); } }
 
 
         static int CheckDocProperty(string propertyName)
@@ -80,6 +81,7 @@ namespace AzDOAddIn
                 if (workItemTypesForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     SaveDocSetting(PlanDocProperties.AzDoWorkItemTypes, workItemTypesForm.SelectedItems());
 
+                PatHelper.SetPat(linkForm.Url, linkForm.PAT);
             }
         }
 
@@ -97,7 +99,7 @@ namespace AzDOAddIn
         {
             foreach(int wiId in wiIds)
             {
-                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, "");
+                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, ActivePAT);
 
                 MSProject.Task projectTask = AddWorkItem(workItem);
             }
@@ -113,7 +115,7 @@ namespace AzDOAddIn
 
             if (currentWiId == 0) return;
 
-            var workItems = AzDORestApiHelper.GetChildWorkItems(ActiveOrgUrl, ActiveTeamProject, currentWiId, "");
+            var workItems = AzDORestApiHelper.GetChildWorkItems(ActiveOrgUrl, ActiveTeamProject, currentWiId, ActivePAT);
 
             if (workItems.Count == 0) return;
 

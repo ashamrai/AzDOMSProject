@@ -54,7 +54,7 @@ namespace AzDOAddIn.Forms
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            var workItems = AzDORestApiHelper.GetWorkItems(ProjectOperations.ActiveOrgUrl, ProjectOperations.ActiveTeamProject, txtBoxIds.Text, "");
+            var workItems = AzDORestApiHelper.GetWorkItems(ProjectOperations.ActiveOrgUrl, ProjectOperations.ActiveTeamProject, txtBoxIds.Text, ProjectOperations.ActivePAT);
 
             if (workItems.count > 0)
             {
