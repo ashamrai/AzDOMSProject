@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using AzDOAddIn.RestApiClasses;
+using Microsoft.Office.Interop.MSProject;
 
 namespace AzDOAddIn
 {
@@ -17,6 +18,7 @@ namespace AzDOAddIn
         {
             public const string GET = "GET";
             public const string POST = "POST";
+            public const string POSTPATCH = "POSTPATCH";
             public const string PATCH = "PATCH";
         }
 
@@ -71,6 +73,39 @@ namespace AzDOAddIn
             return childWorkItems;
         }
 
+        public static WorkItem PublishNewWorkItem(string azDoUrl, string teamProject, string pat, string workItemType, Dictionary<string, string> fields, int parentId = 0)
+        {
+            string body = "";
+            string fieldTemplate = "\"op\": \"add\",\"path\": \"/fields/{0}\", \"from\": null, \"value\": \"{1}\"";
+            string relTemplate = "\"rel\": \"{0}\",\"url\": \"{1}/_apis/wit/workItems/{2}\"";
+
+            foreach (string field in fields.Keys)
+            {
+                string fieldDef = "{" + string.Format(fieldTemplate, field, fields[field]) + "}";
+
+                body = (body == "") ? fieldDef : body + "," + fieldDef;
+            }
+
+            if (parentId > 0)
+            {
+                string relDef = "{\"op\": \"add\",\"path\": \"/relations/-\",\"value\": {" + 
+                    string.Format(relTemplate, "System.LinkTypes.Hierarchy-Reverse", azDoUrl, parentId) + "}}";
+
+                body += "," + relDef;
+            }
+
+            body = "[" + body + "]";
+
+            return PostWorkItem(azDoUrl, teamProject, pat, workItemType, body);
+        }
+
+        public static WorkItem PostWorkItem(string azDoUrl, string teamProject, string pat, string workItemType, string body)
+        {
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitems/${2}?api-version={3}", azDoUrl, teamProject, workItemType,RestApiVersion);
+
+            return InvokeRestApiRequest<WorkItem>(RequestMethod.POSTPATCH, requestUrl, body, pat);
+        }
+
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {
             HttpResponseMessage requestResponse = null;
@@ -98,6 +133,9 @@ namespace AzDOAddIn
                 case RequestMethod.POST:
                     requestResponse = httpClient.PostAsync(requestUrl, new StringContent(requestBody, Encoding.UTF8, "application/json")).Result;
                     break;
+                case RequestMethod.POSTPATCH:
+                    requestResponse = httpClient.PostAsync(requestUrl, new StringContent(requestBody, Encoding.UTF8, "application/json-patch+json")).Result;
+                    break;
             }
 
             httpClient.Dispose();
@@ -108,6 +146,8 @@ namespace AzDOAddIn
                     responceContent = requestResponse.Content.ReadAsStringAsync().Result;
                 else
                 {
+                    responceContent = requestResponse.Content.ReadAsStringAsync().Result;
+                    throw new System.Exception(responceContent);
 #warning process errors here!!
                 }
             }

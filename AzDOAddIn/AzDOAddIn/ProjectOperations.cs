@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MSProject = Microsoft.Office.Interop.MSProject;
 using Office = Microsoft.Office.Core;
 using AzDOAddIn.AzDOAddInSettings;
+using System.Windows.Forms;
 
 namespace AzDOAddIn
 {
@@ -47,16 +48,86 @@ namespace AzDOAddIn
                 if (wiPrjId == 0) continue;
 
                 var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiPrjId, ActivePAT);
-
-                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIRev.PjValue, workItem.rev.ToString());
-                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIState.PjValue, workItem.fields[PlanCoreColumns.WIState.AzDORefName].ToString());
-                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIReason.PjValue, workItem.fields[PlanCoreColumns.WIReason.AzDORefName].ToString());
+                AddCoreFields(ActiveProject.Tasks[i], workItem);
             }
+        }
+
+        internal static void PublishProjectPlan()
+        {
+            try
+            {
+                for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
+                {
+                    int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
+
+                    if (wiPrjId > 0) { /*PublishChanges();*/ }
+                    else { PublishNewWorkItem(ActiveProject.Tasks[i]); }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void PublishNewWorkItem(MSProject.Task task)
+        {
+            string wiType = GetProjectTaskWorkItedType(task);
+            if (string.IsNullOrEmpty(wiType)) return;
+
+            string wiName = task.Name;
+            if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
+
+            int parentId = 0;
+
+            if (WorkItemTreeInConsistency(task))
+            {
+                Dictionary<string, string> fields = new Dictionary<string, string>();
+                fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+
+                if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
+
+                var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
+
+                AddCoreFields(task, workItem);
+            }
+        }
+
+        private static bool WorkItemTreeInConsistency(MSProject.Task task)
+        {
+            if (task.OutlineLevel > 2)
+            {
+                if (GetProjectTaskWorkItedId(task.OutlineParent) != 0) return true;
+
+                MSProject.Task ancestor = task.OutlineParent.OutlineParent;
+
+                do
+                {
+                    if (GetProjectTaskWorkItedId(ancestor) > 0) 
+                        throw new Exception(string.Format("Task [{0}]:\"{1}\"\n should have a parent work item in the plan", 
+                            task.ID, (task.Name.Length > 20) ? task.Name.Substring(0, 17) + "..." : task.Name));
+
+                    ancestor = ancestor.OutlineParent;
+
+                } while (ancestor.OutlineLevel > 1);
+            }
+
+            return true;
         }
 
         private static int GetProjectTaskWorkItedId(MSProject.Task task)
         {
             return GetIntFieldValue(task, PlanCoreColumns.WIId.PjValue);
+        }
+
+        private static string GetProjectTaskWorkItedState(MSProject.Task task)
+        {
+            return GetStringFieldValue(task, PlanCoreColumns.WIState.PjValue);
+        }
+
+        private static string GetProjectTaskWorkItedType(MSProject.Task task)
+        {
+            return GetStringFieldValue(task, PlanCoreColumns.WIType.PjValue);
         }
 
         static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
@@ -154,16 +225,10 @@ namespace AzDOAddIn
 
             int taskInsertPosition = GetTaskChildInsertPosition(workItem, parentTask);
 
-            MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName], 
-                (taskInsertPosition == 0)? Type.Missing : taskInsertPosition);            
+            MSProject.Task projectTask = ActiveProject.Tasks.Add(workItem.fields[PlanCoreColumns.WITitle.AzDORefName],
+                (taskInsertPosition == 0) ? Type.Missing : taskInsertPosition);
 
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIId);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIRev);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIState);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIReason);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIType);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
-            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIArea);
+            AddCoreFields(projectTask, workItem);
 
             if (parentTask != null)
                 while (projectTask.OutlineLevel <= parentTask.OutlineLevel)
@@ -173,6 +238,17 @@ namespace AzDOAddIn
                     projectTask.OutlineOutdent();
 
             return projectTask;
+        }
+
+        private static void AddCoreFields(MSProject.Task projectTask, RestApiClasses.WorkItem workItem)
+        {
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIId);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIRev);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIState);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIReason);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIType);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
+            AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIArea);
         }
 
         private static MSProject.Task FindParentInPlan(RestApiClasses.WorkItem workItem)

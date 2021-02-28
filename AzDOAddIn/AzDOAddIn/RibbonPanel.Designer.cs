@@ -36,12 +36,12 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group_Sync = this.Factory.CreateRibbonGroup();
+            this.group_View = this.Factory.CreateRibbonGroup();
             this.btn_LinkToTeamProject = this.Factory.CreateRibbonButton();
             this.btn_PublishWorkItems = this.Factory.CreateRibbonButton();
             this.btn_UpdatePlan = this.Factory.CreateRibbonButton();
             this.btnGetWorkItems = this.Factory.CreateRibbonButton();
             this.btnImportChilds = this.Factory.CreateRibbonButton();
-            this.group_View = this.Factory.CreateRibbonGroup();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group_Sync.SuspendLayout();
@@ -66,6 +66,12 @@
             this.group_Sync.Label = "Sync Work Items";
             this.group_Sync.Name = "group_Sync";
             // 
+            // group_View
+            // 
+            this.group_View.Items.Add(this.btn_AddColumns);
+            this.group_View.Label = "View";
+            this.group_View.Name = "group_View";
+            // 
             // btn_LinkToTeamProject
             // 
             this.btn_LinkToTeamProject.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -80,6 +86,7 @@
             this.btn_PublishWorkItems.Label = "Publish Work Items";
             this.btn_PublishWorkItems.Name = "btn_PublishWorkItems";
             this.btn_PublishWorkItems.ShowImage = true;
+            this.btn_PublishWorkItems.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_PublishWorkItems_Click);
             // 
             // btn_UpdatePlan
             // 
@@ -100,12 +107,6 @@
             this.btnImportChilds.Label = "Import Childs";
             this.btnImportChilds.Name = "btnImportChilds";
             this.btnImportChilds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImportChilds_Click);
-            // 
-            // group_View
-            // 
-            this.group_View.Items.Add(this.btn_AddColumns);
-            this.group_View.Label = "View";
-            this.group_View.Name = "group_View";
             // 
             // btn_AddColumns
             // 

@@ -41,5 +41,10 @@ namespace AzDOAddIn
         {
             ProjectOperations.ImportChilds();
         }
+
+        private void btn_PublishWorkItems_Click(object sender, RibbonControlEventArgs e)
+        {
+            ProjectOperations.PublishProjectPlan();
+        }
     }
 }

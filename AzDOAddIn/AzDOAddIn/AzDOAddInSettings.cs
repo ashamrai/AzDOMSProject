@@ -22,6 +22,12 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string Parent = "System.Parent";
     }
 
+    static class WorkItemSystemLinks
+    {
+        public const string Parent = "System.LinkTypes.Hierarchy-Reverse";
+        public const string Child = "System.LinkTypes.Hierarchy-Forward";
+    }
+
     public static class PlanDocProperties
     {
         public const string AzDoUrl = "Azure DevOps Service URL";
