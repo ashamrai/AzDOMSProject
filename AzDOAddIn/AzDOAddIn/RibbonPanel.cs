@@ -25,7 +25,7 @@ namespace AzDOAddIn
 
         private void btn_UpdatePlan_Click(object sender, RibbonControlEventArgs e)
         {
-            
+            ProjectOperations.UpdateProjectPlan();
         }
 
         private void btnGetWorkItems_Click(object sender, RibbonControlEventArgs e)

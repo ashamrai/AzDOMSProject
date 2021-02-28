@@ -36,7 +36,28 @@ namespace AzDOAddIn
 
                 return true;
             }
-        }        
+        }
+
+        internal static void UpdateProjectPlan()
+        {
+            for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
+            {
+                int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
+
+                if (wiPrjId == 0) continue;
+
+                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiPrjId, ActivePAT);
+
+                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIRev.PjValue, workItem.rev.ToString());
+                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIState.PjValue, workItem.fields[PlanCoreColumns.WIState.AzDORefName].ToString());
+                ActiveProject.Tasks[i].SetField(PlanCoreColumns.WIReason.PjValue, workItem.fields[PlanCoreColumns.WIReason.AzDORefName].ToString());
+            }
+        }
+
+        private static int GetProjectTaskWorkItedId(MSProject.Task task)
+        {
+            return GetIntFieldValue(task, PlanCoreColumns.WIId.PjValue);
+        }
 
         static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
         static MSProject.Task SelectedTask { get { return (AppObj.ActiveSelection.Tasks == null) ? null : AppObj.ActiveSelection.Tasks[1]; } }
