@@ -21,23 +21,23 @@ namespace AzDOAddIn.RestApiClasses
         public bool isTeamAdmin { get; set; }
         [JsonProperty("identity")]
         public IdentityRef identity { get; set; }        
+    }
 
-        public class IdentityRef
-        {
-            [JsonProperty("id")]
-            public string id { get; set; }
-            [JsonProperty("descriptor")]
-            public string descriptor { get; set; }
-            [JsonProperty("displayName")]
-            public string displayName { get; set; }
-            [JsonProperty("imageUrl")]
-            public string imageUrl { get; set; }
-            [JsonProperty("isDeletedInOrigin")]
-            public bool isDeletedInOrigin { get; set; }
-            [JsonProperty("url")]
-            public string url { get; set; }
-            [JsonProperty("_links")]
-            public object _links { get; set; }
-        }
+    public class IdentityRef
+    {
+        [JsonProperty("id")]
+        public string id { get; set; }
+        [JsonProperty("descriptor")]
+        public string descriptor { get; set; }
+        [JsonProperty("displayName")]
+        public string displayName { get; set; }
+        [JsonProperty("imageUrl")]
+        public string imageUrl { get; set; }
+        [JsonProperty("isDeletedInOrigin")]
+        public bool isDeletedInOrigin { get; set; }
+        [JsonProperty("url")]
+        public string url { get; set; }
+        [JsonProperty("_links")]
+        public object _links { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using MSProject = Microsoft.Office.Interop.MSProject;
 using Office = Microsoft.Office.Core;
 using AzDOAddIn.AzDOAddInSettings;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace AzDOAddIn
 {
@@ -125,12 +126,13 @@ namespace AzDOAddIn
             {
                 Dictionary<string, string> fields = new Dictionary<string, string>();
                 fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+                if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
 
                 if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
 
                 var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
 
-                AddCoreFields(task, workItem);
+                AddCoreFields(task, workItem);               
             }
         }
 
@@ -271,6 +273,11 @@ namespace AzDOAddIn
 
             AddCoreFields(projectTask, workItem);
 
+            if (workItem.fields.ContainsKey(PlanCoreColumns.WIAssignedTo.AzDORefName))
+            {
+                projectTask.ResourceNames = GetUserDisplayName(workItem.fields[PlanCoreColumns.WIAssignedTo.AzDORefName]);
+            }
+
             if (parentTask != null)
                 while (projectTask.OutlineLevel <= parentTask.OutlineLevel)
                     projectTask.OutlineIndent();
@@ -290,6 +297,13 @@ namespace AzDOAddIn
             AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIType);
             AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIIteration);
             AddCoreFieldToTask(projectTask, workItem, PlanCoreColumns.WIArea);
+        }
+
+        private static string GetUserDisplayName(object userObject)
+        {
+            var teamMember = JsonConvert.DeserializeObject<RestApiClasses.IdentityRef>(userObject.ToString());
+
+            return teamMember.displayName;
         }
 
         private static MSProject.Task FindParentInPlan(RestApiClasses.WorkItem workItem)
