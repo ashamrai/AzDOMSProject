@@ -46,5 +46,10 @@ namespace AzDOAddIn
         {
             ProjectOperations.PublishProjectPlan();
         }
+
+        private void btn_ImportTeamMembers_Click(object sender, RibbonControlEventArgs e)
+        {
+            ProjectOperations.ImportTeamMembers();
+        }
     }
 }

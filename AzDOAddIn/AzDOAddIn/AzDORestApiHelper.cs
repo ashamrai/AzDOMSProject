@@ -30,6 +30,18 @@ namespace AzDOAddIn
             return InvokeRestApiRequest<TeamProjectsResponse>(RequestMethod.GET, requestUrl, "", pat);
         }
 
+        public static WebApiTeamResponse GetTeams(string azDoUrl, string teamProject, string pat)
+        {
+            string requestUrl = string.Format("{0}/_apis/projects/{1}/teams?api-version={2}", azDoUrl, teamProject, RestApiVersion);
+            return InvokeRestApiRequest<WebApiTeamResponse>(RequestMethod.GET, requestUrl, "", pat);
+        }
+
+        public static TeamMembersResponse GetTeamMembers(string azDoUrl, string teamProject, string team, string pat)
+        {
+            string requestUrl = string.Format("{0}/_apis/projects/{1}/teams/{2}/members?api-version={3}", azDoUrl, teamProject, team, RestApiVersion);
+            return InvokeRestApiRequest<TeamMembersResponse>(RequestMethod.GET, requestUrl, "", pat);
+        }
+
         public static WorkItem GetWorkItem(string azDoUrl, string teamProject, int wiId, string pat)
         {
             string requestUrl = string.Format("{0}/{1}/_apis/wit/workitems/{2}?$expand=relations&api-version={3}", azDoUrl, teamProject, wiId, RestApiVersion);

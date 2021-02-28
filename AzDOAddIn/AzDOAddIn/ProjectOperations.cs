@@ -39,6 +39,17 @@ namespace AzDOAddIn
             }
         }
 
+        private static bool CheckUserInResources(string name)
+        {
+            if (ActiveProject.Resources.Count == 0) return false;
+
+            for (int i = 1; i <= ActiveProject.Resources.Count; i++)
+                if (ActiveProject.Resources[i].Name == name)
+                    return true;
+
+            return false;
+        }
+
         internal static void UpdateProjectPlan()
         {
             for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
@@ -67,6 +78,36 @@ namespace AzDOAddIn
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        internal static void ImportTeamMembers()
+        {
+            var teams = AzDORestApiHelper.GetTeams(ActiveOrgUrl, ActiveTeamProject, ActivePAT);
+
+            if (teams.count > 0)
+            {
+                Forms.Teams teamsForm = new Forms.Teams();
+
+                foreach (var team in teams.WebApiTeams) teamsForm.AddTeam(team.name);
+
+                if (teamsForm.ShowDialog() == DialogResult.OK)
+                {
+                    int teamMembersCount = 0;
+                    var teamMembers = AzDORestApiHelper.GetTeamMembers(ActiveOrgUrl, ActiveTeamProject, teamsForm.GetTeam(), ActivePAT);
+
+                    if (teamMembers.count > 0)
+                    {
+                        foreach (var teamMember in teamMembers.TeamMembers)
+                            if (!CheckUserInResources(teamMember.identity.displayName))
+                            {
+                                ActiveProject.Resources.Add(teamMember.identity.displayName);
+                                teamMembersCount++;
+                            }
+                    }
+
+                    MessageBox.Show(teamMembersCount + " user(s) were imported to the plan", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 

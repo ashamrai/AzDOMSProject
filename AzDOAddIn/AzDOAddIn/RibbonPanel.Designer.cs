@@ -36,12 +36,13 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group_Sync = this.Factory.CreateRibbonGroup();
-            this.group_View = this.Factory.CreateRibbonGroup();
             this.btn_LinkToTeamProject = this.Factory.CreateRibbonButton();
             this.btn_PublishWorkItems = this.Factory.CreateRibbonButton();
             this.btn_UpdatePlan = this.Factory.CreateRibbonButton();
             this.btnGetWorkItems = this.Factory.CreateRibbonButton();
             this.btnImportChilds = this.Factory.CreateRibbonButton();
+            this.group_View = this.Factory.CreateRibbonGroup();
+            this.btn_ImportTeamMembers = this.Factory.CreateRibbonButton();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group_Sync.SuspendLayout();
@@ -65,12 +66,6 @@
             this.group_Sync.Items.Add(this.btnImportChilds);
             this.group_Sync.Label = "Sync Work Items";
             this.group_Sync.Name = "group_Sync";
-            // 
-            // group_View
-            // 
-            this.group_View.Items.Add(this.btn_AddColumns);
-            this.group_View.Label = "View";
-            this.group_View.Name = "group_View";
             // 
             // btn_LinkToTeamProject
             // 
@@ -108,6 +103,19 @@
             this.btnImportChilds.Name = "btnImportChilds";
             this.btnImportChilds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImportChilds_Click);
             // 
+            // group_View
+            // 
+            this.group_View.Items.Add(this.btn_ImportTeamMembers);
+            this.group_View.Items.Add(this.btn_AddColumns);
+            this.group_View.Label = "View";
+            this.group_View.Name = "group_View";
+            // 
+            // btn_ImportTeamMembers
+            // 
+            this.btn_ImportTeamMembers.Label = "Import Team Members";
+            this.btn_ImportTeamMembers.Name = "btn_ImportTeamMembers";
+            this.btn_ImportTeamMembers.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_ImportTeamMembers_Click);
+            // 
             // btn_AddColumns
             // 
             this.btn_AddColumns.Label = "Add Columns";
@@ -141,6 +149,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_AddColumns;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetWorkItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportChilds;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_ImportTeamMembers;
     }
 
     partial class ThisRibbonCollection
