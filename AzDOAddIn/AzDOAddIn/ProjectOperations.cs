@@ -84,31 +84,38 @@ namespace AzDOAddIn
 
         internal static void ImportTeamMembers()
         {
-            var teams = AzDORestApiHelper.GetTeams(ActiveOrgUrl, ActiveTeamProject, ActivePAT);
-
-            if (teams.count > 0)
+            try
             {
-                Forms.Teams teamsForm = new Forms.Teams();
+                var teams = AzDORestApiHelper.GetTeams(ActiveOrgUrl, ActiveTeamProject, ActivePAT);
 
-                foreach (var team in teams.WebApiTeams) teamsForm.AddTeam(team.name);
-
-                if (teamsForm.ShowDialog() == DialogResult.OK)
+                if (teams.count > 0)
                 {
-                    int teamMembersCount = 0;
-                    var teamMembers = AzDORestApiHelper.GetTeamMembers(ActiveOrgUrl, ActiveTeamProject, teamsForm.GetTeam(), ActivePAT);
+                    Forms.Teams teamsForm = new Forms.Teams();
 
-                    if (teamMembers.count > 0)
+                    foreach (var team in teams.WebApiTeams) teamsForm.AddTeam(team.name);
+
+                    if (teamsForm.ShowDialog() == DialogResult.OK)
                     {
-                        foreach (var teamMember in teamMembers.TeamMembers)
-                            if (!CheckUserInResources(teamMember.identity.displayName))
-                            {
-                                ActiveProject.Resources.Add(teamMember.identity.displayName);
-                                teamMembersCount++;
-                            }
-                    }
+                        int teamMembersCount = 0;
+                        var teamMembers = AzDORestApiHelper.GetTeamMembers(ActiveOrgUrl, ActiveTeamProject, teamsForm.GetTeam(), ActivePAT);
 
-                    MessageBox.Show(teamMembersCount + " user(s) were imported to the plan", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (teamMembers.count > 0)
+                        {
+                            foreach (var teamMember in teamMembers.TeamMembers)
+                                if (!CheckUserInResources(teamMember.identity.displayName))
+                                {
+                                    ActiveProject.Resources.Add(teamMember.identity.displayName);
+                                    teamMembersCount++;
+                                }
+                        }
+
+                        MessageBox.Show(teamMembersCount + " user(s) were imported to the plan", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -126,6 +133,8 @@ namespace AzDOAddIn
             {
                 Dictionary<string, string> fields = new Dictionary<string, string>();
                 fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+                //AddBaselineDates(task, fields);              
+
                 if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
 
                 if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
@@ -134,6 +143,20 @@ namespace AzDOAddIn
 
                 AddCoreFields(task, workItem);               
             }
+        }
+
+        private static void AddBaselineDates(MSProject.Task task, Dictionary<string, string> fields)
+        {
+            DateTime start, finish;
+
+            if (!DateTime.TryParse(task.BaselineStartText, out start)) return;
+            if (!DateTime.TryParse(task.BaselineFinishText, out finish)) return;
+
+
+            fields.Add(WorkItemSchedulingFileds.Start, start.ToString());
+            fields.Add(WorkItemSchedulingFileds.Finish, finish.ToString());
+
+            if (task.BaselineWork > 0) fields.Add(WorkItemWorkFileds.OriginalEstimate, task.BaselineWork);
         }
 
         private static bool WorkItemTreeInConsistency(MSProject.Task task)

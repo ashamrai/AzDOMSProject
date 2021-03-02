@@ -22,6 +22,19 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string Parent = "System.Parent";
     }
 
+    static class WorkItemWorkFileds
+    {
+        public const string OriginalEstimate = "Microsoft.VSTS.Scheduling.OriginalEstimate";
+        public const string Remaining = "Microsoft.VSTS.Scheduling.RemainingWork";
+        public const string Completed = "Microsoft.VSTS.Scheduling.CompletedWork";
+    }
+
+    static class WorkItemSchedulingFileds
+    {
+        public const string Start = "Microsoft.VSTS.Scheduling.StartDate";
+        public const string Finish = "Microsoft.VSTS.Scheduling.FinishDate";
+    }
+
     static class WorkItemSystemLinks
     {
         public const string Parent = "System.LinkTypes.Hierarchy-Reverse";
