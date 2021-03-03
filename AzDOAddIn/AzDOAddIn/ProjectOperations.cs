@@ -72,11 +72,38 @@ namespace AzDOAddIn
                 {
                     int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
 
-                    if (wiPrjId > 0) { /*PublishChanges();*/ }
+                    if (wiPrjId > 0) { PublishChanges(ActiveProject.Tasks[i]); }
                     else { PublishNewWorkItem(ActiveProject.Tasks[i]); }
                 }
             }
             catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void PublishChanges(MSProject.Task task)
+        {
+            try
+            {
+                string wiName = task.Name;
+                if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
+
+                if (WorkItemTreeInConsistency(task))
+                {
+                    int wiId = GetProjectTaskWorkItedId(task);
+                    Dictionary<string, string> fields = new Dictionary<string, string>();
+                    fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+                    AddBaselineDates(task, fields);
+
+                    if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
+
+                    var workItem = AzDORestApiHelper.UpdateWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, fields);
+
+                    AddCoreFields(task, workItem);
+                }
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -121,27 +148,34 @@ namespace AzDOAddIn
 
         private static void PublishNewWorkItem(MSProject.Task task)
         {
-            string wiType = GetProjectTaskWorkItedType(task);
-            if (string.IsNullOrEmpty(wiType)) return;
-
-            string wiName = task.Name;
-            if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
-
-            int parentId = 0;
-
-            if (WorkItemTreeInConsistency(task))
+            try
             {
-                Dictionary<string, string> fields = new Dictionary<string, string>();
-                fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
-                //AddBaselineDates(task, fields);              
+                string wiType = GetProjectTaskWorkItedType(task);
+                if (string.IsNullOrEmpty(wiType)) return;
 
-                if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
+                string wiName = task.Name;
+                if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
 
-                if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
+                int parentId = 0;
 
-                var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
+                if (WorkItemTreeInConsistency(task))
+                {
+                    Dictionary<string, string> fields = new Dictionary<string, string>();
+                    fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+                    AddBaselineDates(task, fields);
 
-                AddCoreFields(task, workItem);               
+                    if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
+
+                    if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
+
+                    var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
+
+                    AddCoreFields(task, workItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -149,14 +183,20 @@ namespace AzDOAddIn
         {
             DateTime start, finish;
 
-            if (!DateTime.TryParse(task.BaselineStartText, out start)) return;
-            if (!DateTime.TryParse(task.BaselineFinishText, out finish)) return;
+            if (!DateTime.TryParse(task.BaselineStartText, out _)) return;
+            if (!DateTime.TryParse(task.BaselineFinishText, out _)) return;
 
+            start = (DateTime)task.BaselineStart;
+            finish = (DateTime)task.BaselineFinish;
 
-            fields.Add(WorkItemSchedulingFileds.Start, start.ToString());
-            fields.Add(WorkItemSchedulingFileds.Finish, finish.ToString());
+            fields.Add(WorkItemSchedulingFileds.Start, start.ToUniversalTime().ToString("s") + "Z");
+            fields.Add(WorkItemSchedulingFileds.Finish, finish.ToUniversalTime().ToString("s") + "Z");
 
-            if (task.BaselineWork > 0) fields.Add(WorkItemWorkFileds.OriginalEstimate, task.BaselineWork);
+            if (task.BaselineWork > 0)
+            {
+                double hours = task.BaselineWork / 60;
+                fields.Add(WorkItemWorkFileds.OriginalEstimate, hours.ToString());
+            }
         }
 
         private static bool WorkItemTreeInConsistency(MSProject.Task task)

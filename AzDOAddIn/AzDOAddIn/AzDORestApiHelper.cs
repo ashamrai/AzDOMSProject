@@ -118,6 +118,30 @@ namespace AzDOAddIn
             return InvokeRestApiRequest<WorkItem>(RequestMethod.POSTPATCH, requestUrl, body, pat);
         }
 
+        public static WorkItem UpdateWorkItem(string azDoUrl, string teamProject, string pat, int id, Dictionary<string, string> fields)
+        {
+            string body = "";
+            string fieldTemplate = "\"op\": \"add\",\"path\": \"/fields/{0}\", \"from\": null, \"value\": \"{1}\"";
+
+            foreach (string field in fields.Keys)
+            {
+                string fieldDef = "{" + string.Format(fieldTemplate, field, fields[field]) + "}";
+
+                body = (body == "") ? fieldDef : body + "," + fieldDef;
+            }
+
+            body = "[" + body + "]";
+
+            return PatchWorkItem(azDoUrl, teamProject, pat, id, body);
+        }
+
+        public static WorkItem PatchWorkItem(string azDoUrl, string teamProject, string pat, int id, string body)
+        {
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/workitems/{2}?api-version={3}", azDoUrl, teamProject, id, RestApiVersion);
+
+            return InvokeRestApiRequest<WorkItem>(RequestMethod.PATCH, requestUrl, body, pat);
+        }
+
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {
             HttpResponseMessage requestResponse = null;
@@ -147,6 +171,11 @@ namespace AzDOAddIn
                     break;
                 case RequestMethod.POSTPATCH:
                     requestResponse = httpClient.PostAsync(requestUrl, new StringContent(requestBody, Encoding.UTF8, "application/json-patch+json")).Result;
+                    break;
+                case RequestMethod.PATCH:
+                    var patchRequest = new HttpRequestMessage(new HttpMethod("PATCH"), requestUrl);
+                    patchRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json-patch+json");
+                    requestResponse = httpClient.SendAsync(patchRequest).Result;
                     break;
             }
 
