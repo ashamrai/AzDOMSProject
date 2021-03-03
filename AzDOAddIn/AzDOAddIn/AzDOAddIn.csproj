@@ -251,6 +251,27 @@
     </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\uploading.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\hanger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\checklist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\hierarchical-structure.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\volume-control.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\inbox.png" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

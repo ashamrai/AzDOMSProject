@@ -34,26 +34,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RibbonPanel));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group_Sync = this.Factory.CreateRibbonGroup();
+            this.group_Settings = this.Factory.CreateRibbonGroup();
             this.btn_LinkToTeamProject = this.Factory.CreateRibbonButton();
             this.btn_PublishWorkItems = this.Factory.CreateRibbonButton();
             this.btn_UpdatePlan = this.Factory.CreateRibbonButton();
             this.btnGetWorkItems = this.Factory.CreateRibbonButton();
             this.btnImportChilds = this.Factory.CreateRibbonButton();
-            this.group_View = this.Factory.CreateRibbonGroup();
             this.btn_ImportTeamMembers = this.Factory.CreateRibbonButton();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group_Sync.SuspendLayout();
-            this.group_View.SuspendLayout();
+            this.group_Settings.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.group_Sync);
-            this.tab1.Groups.Add(this.group_View);
+            this.tab1.Groups.Add(this.group_Settings);
             this.tab1.Label = "Azure DevOps Work Items";
             this.tab1.Name = "tab1";
             // 
@@ -67,9 +68,17 @@
             this.group_Sync.Label = "Sync Work Items";
             this.group_Sync.Name = "group_Sync";
             // 
+            // group_Settings
+            // 
+            this.group_Settings.Items.Add(this.btn_ImportTeamMembers);
+            this.group_Settings.Items.Add(this.btn_AddColumns);
+            this.group_Settings.Label = "Settings";
+            this.group_Settings.Name = "group_Settings";
+            // 
             // btn_LinkToTeamProject
             // 
             this.btn_LinkToTeamProject.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btn_LinkToTeamProject.Image = ((System.Drawing.Image)(resources.GetObject("btn_LinkToTeamProject.Image")));
             this.btn_LinkToTeamProject.Label = "Link To Team Project";
             this.btn_LinkToTeamProject.Name = "btn_LinkToTeamProject";
             this.btn_LinkToTeamProject.ShowImage = true;
@@ -78,6 +87,7 @@
             // btn_PublishWorkItems
             // 
             this.btn_PublishWorkItems.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btn_PublishWorkItems.Image = ((System.Drawing.Image)(resources.GetObject("btn_PublishWorkItems.Image")));
             this.btn_PublishWorkItems.Label = "Publish Work Items";
             this.btn_PublishWorkItems.Name = "btn_PublishWorkItems";
             this.btn_PublishWorkItems.ShowImage = true;
@@ -86,6 +96,7 @@
             // btn_UpdatePlan
             // 
             this.btn_UpdatePlan.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btn_UpdatePlan.Image = global::AzDOAddIn.Properties.Resources.inbox;
             this.btn_UpdatePlan.Label = "Update Plan";
             this.btn_UpdatePlan.Name = "btn_UpdatePlan";
             this.btn_UpdatePlan.ShowImage = true;
@@ -93,33 +104,34 @@
             // 
             // btnGetWorkItems
             // 
+            this.btnGetWorkItems.Image = global::AzDOAddIn.Properties.Resources.checklist;
             this.btnGetWorkItems.Label = "Get Work Items";
             this.btnGetWorkItems.Name = "btnGetWorkItems";
+            this.btnGetWorkItems.ShowImage = true;
             this.btnGetWorkItems.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnGetWorkItems_Click);
             // 
             // btnImportChilds
             // 
+            this.btnImportChilds.Image = global::AzDOAddIn.Properties.Resources.hierarchical_structure;
             this.btnImportChilds.Label = "Import Childs";
             this.btnImportChilds.Name = "btnImportChilds";
+            this.btnImportChilds.ShowImage = true;
             this.btnImportChilds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImportChilds_Click);
-            // 
-            // group_View
-            // 
-            this.group_View.Items.Add(this.btn_ImportTeamMembers);
-            this.group_View.Items.Add(this.btn_AddColumns);
-            this.group_View.Label = "View";
-            this.group_View.Name = "group_View";
             // 
             // btn_ImportTeamMembers
             // 
+            this.btn_ImportTeamMembers.Image = global::AzDOAddIn.Properties.Resources.user;
             this.btn_ImportTeamMembers.Label = "Import Team Members";
             this.btn_ImportTeamMembers.Name = "btn_ImportTeamMembers";
+            this.btn_ImportTeamMembers.ShowImage = true;
             this.btn_ImportTeamMembers.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_ImportTeamMembers_Click);
             // 
             // btn_AddColumns
             // 
+            this.btn_AddColumns.Image = global::AzDOAddIn.Properties.Resources.volume_control;
             this.btn_AddColumns.Label = "Add Columns";
             this.btn_AddColumns.Name = "btn_AddColumns";
+            this.btn_AddColumns.ShowImage = true;
             this.btn_AddColumns.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_AddColumns_Click);
             // 
             // RibbonPanel
@@ -132,8 +144,8 @@
             this.tab1.PerformLayout();
             this.group_Sync.ResumeLayout(false);
             this.group_Sync.PerformLayout();
-            this.group_View.ResumeLayout(false);
-            this.group_View.PerformLayout();
+            this.group_Settings.ResumeLayout(false);
+            this.group_Settings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -145,7 +157,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_LinkToTeamProject;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_PublishWorkItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_UpdatePlan;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group_View;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group_Settings;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_AddColumns;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetWorkItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportChilds;

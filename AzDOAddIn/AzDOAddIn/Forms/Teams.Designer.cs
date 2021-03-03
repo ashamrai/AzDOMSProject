@@ -73,6 +73,7 @@ namespace AzDOAddIn.Forms
             this.Controls.Add(this.btn_Ok);
             this.Controls.Add(this.lst_Teams);
             this.Name = "Teams";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teams";
             this.ResumeLayout(false);
 

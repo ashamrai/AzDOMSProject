@@ -74,6 +74,7 @@ namespace AzDOAddIn.Forms
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(252, 189);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -95,6 +96,7 @@ namespace AzDOAddIn.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(482, 219);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnCancel);
@@ -103,6 +105,7 @@ namespace AzDOAddIn.Forms
             this.Controls.Add(this.txtBoxIds);
             this.Controls.Add(this.label1);
             this.Name = "GetWorkItemsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GetWorkItemsForm";
             this.ResumeLayout(false);
             this.PerformLayout();
