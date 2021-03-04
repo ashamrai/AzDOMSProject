@@ -53,14 +53,30 @@ namespace AzDOAddIn
 
         internal static void UpdateProjectPlan()
         {
-            for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
+            try
             {
-                int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
+                for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
+                {
+                    int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
 
-                if (wiPrjId == 0) continue;
+                    if (wiPrjId == 0) continue;
 
-                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiPrjId, ActivePAT);
-                AddCoreFields(ActiveProject.Tasks[i], workItem);
+                    var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiPrjId, ActivePAT);
+                    AddCoreFields(ActiveProject.Tasks[i], workItem);
+                    AddWork(ActiveProject.Tasks[i], workItem);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void AddWork(MSProject.Task task, RestApiClasses.WorkItem workItem)
+        {
+            if (workItem.fields.ContainsKey(WorkItemWorkFileds.Completed))
+            {
+                task.ActualWork = (double)workItem.fields[WorkItemWorkFileds.Completed] * 60;
             }
         }
 
@@ -261,25 +277,32 @@ namespace AzDOAddIn
         }
 
         internal static void LinkToTeamProject()
-        {           
-            Forms.WndLinkToTeamProject linkForm = new Forms.WndLinkToTeamProject();
-
-            if (linkForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            try
             {
-                SaveDocSetting(PlanDocProperties.AzDoUrl, linkForm.Url);
-                SaveDocSetting(PlanDocProperties.AzDoTeamProject, linkForm.TeamProject);
+                Forms.WndLinkToTeamProject linkForm = new Forms.WndLinkToTeamProject();
 
-                Forms.WorkItemTypes workItemTypesForm = new Forms.WorkItemTypes();
+                if (linkForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    SaveDocSetting(PlanDocProperties.AzDoUrl, linkForm.Url);
+                    SaveDocSetting(PlanDocProperties.AzDoTeamProject, linkForm.TeamProject);
 
-                var workItemTypes = AzDORestApiHelper.GetWorkItemTypes(linkForm.Url, linkForm.TeamProject, linkForm.PAT);
+                    Forms.WorkItemTypes workItemTypesForm = new Forms.WorkItemTypes();
 
-                foreach(var item in workItemTypes.WorkItemTypes)
-                    workItemTypesForm.AddWorkItemTypeToList(item.name);
+                    var workItemTypes = AzDORestApiHelper.GetWorkItemTypes(linkForm.Url, linkForm.TeamProject, linkForm.PAT);
 
-                if (workItemTypesForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    SaveDocSetting(PlanDocProperties.AzDoWorkItemTypes, workItemTypesForm.SelectedItems());
+                    foreach (var item in workItemTypes.WorkItemTypes)
+                        workItemTypesForm.AddWorkItemTypeToList(item.name);
 
-                PatHelper.SetPat(linkForm.Url, linkForm.PAT);
+                    if (workItemTypesForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        SaveDocSetting(PlanDocProperties.AzDoWorkItemTypes, workItemTypesForm.SelectedItems());
+
+                    PatHelper.SetPat(linkForm.Url, linkForm.PAT);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -305,21 +328,28 @@ namespace AzDOAddIn
 
         internal static void ImportChilds()
         {
-            var currentTask = SelectedTask;
-
-            if (currentTask == null) return;
-
-            int currentWiId = GetIntFieldValue(currentTask, PlanCoreColumns.WIId.PjValue);
-
-            if (currentWiId == 0) return;
-
-            var workItems = AzDORestApiHelper.GetChildWorkItems(ActiveOrgUrl, ActiveTeamProject, currentWiId, ActivePAT);
-
-            if (workItems.Count == 0) return;
-
-            foreach(var workItem in workItems)
+            try
             {
-                AddWorkItem(workItem, currentTask);
+                var currentTask = SelectedTask;
+
+                if (currentTask == null) return;
+
+                int currentWiId = GetIntFieldValue(currentTask, PlanCoreColumns.WIId.PjValue);
+
+                if (currentWiId == 0) return;
+
+                var workItems = AzDORestApiHelper.GetChildWorkItems(ActiveOrgUrl, ActiveTeamProject, currentWiId, ActivePAT);
+
+                if (workItems.Count == 0) return;
+
+                foreach (var workItem in workItems)
+                {
+                    AddWorkItem(workItem, currentTask);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
