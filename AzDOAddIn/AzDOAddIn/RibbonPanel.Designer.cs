@@ -37,12 +37,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RibbonPanel));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group_Sync = this.Factory.CreateRibbonGroup();
-            this.group_Settings = this.Factory.CreateRibbonGroup();
             this.btn_LinkToTeamProject = this.Factory.CreateRibbonButton();
             this.btn_PublishWorkItems = this.Factory.CreateRibbonButton();
             this.btn_UpdatePlan = this.Factory.CreateRibbonButton();
             this.btnGetWorkItems = this.Factory.CreateRibbonButton();
             this.btnImportChilds = this.Factory.CreateRibbonButton();
+            this.group_Settings = this.Factory.CreateRibbonGroup();
             this.btn_ImportTeamMembers = this.Factory.CreateRibbonButton();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
@@ -67,13 +67,6 @@
             this.group_Sync.Items.Add(this.btnImportChilds);
             this.group_Sync.Label = "Sync Work Items";
             this.group_Sync.Name = "group_Sync";
-            // 
-            // group_Settings
-            // 
-            this.group_Settings.Items.Add(this.btn_ImportTeamMembers);
-            this.group_Settings.Items.Add(this.btn_AddColumns);
-            this.group_Settings.Label = "Settings";
-            this.group_Settings.Name = "group_Settings";
             // 
             // btn_LinkToTeamProject
             // 
@@ -117,6 +110,13 @@
             this.btnImportChilds.Name = "btnImportChilds";
             this.btnImportChilds.ShowImage = true;
             this.btnImportChilds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImportChilds_Click);
+            // 
+            // group_Settings
+            // 
+            this.group_Settings.Items.Add(this.btn_ImportTeamMembers);
+            this.group_Settings.Items.Add(this.btn_AddColumns);
+            this.group_Settings.Label = "Settings";
+            this.group_Settings.Name = "group_Settings";
             // 
             // btn_ImportTeamMembers
             // 
