@@ -231,7 +231,7 @@ namespace AzDOAddIn
             if (task.BaselineWork > 0)
             {
                 double hours = task.BaselineWork / 60;
-                fields.Add(WorkItemWorkFileds.OriginalEstimate, hours.ToString());
+                fields.Add(WorkItemWorkFileds.OriginalEstimate, hours.ToString().Replace(",", "."));
             }
         }
 
