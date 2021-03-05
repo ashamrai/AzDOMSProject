@@ -114,6 +114,12 @@ namespace AzDOAddIn
 
                     if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
 
+                    string area = GetStringFieldValue(task, PlanCoreColumns.WIArea.PjValue);
+                    string iteration = GetStringFieldValue(task, PlanCoreColumns.WIIteration.PjValue);
+
+                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area);
+                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration);
+
                     var workItem = AzDORestApiHelper.UpdateWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, fields);
 
                     if (workItem.fields.ContainsKey(WorkItemSystemFileds.Parent) && task.OutlineLevel == 1)
@@ -203,6 +209,12 @@ namespace AzDOAddIn
                     if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
 
                     if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
+
+                    string area = GetStringFieldValue(task, PlanCoreColumns.WIArea.PjValue);
+                    string iteration = GetStringFieldValue(task, PlanCoreColumns.WIIteration.PjValue);
+
+                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area);
+                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration);
 
                     var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
 
