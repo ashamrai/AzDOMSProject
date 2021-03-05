@@ -22,6 +22,8 @@ namespace AzDOAddIn
             public const string PATCH = "PATCH";
         }
 
+        const string ParenLinkName = "System.LinkTypes.Hierarchy-Reverse";
+
         public static string RestApiVersion = "5.0";
 
         public static TeamProjectsResponse GetTeamProjects(string azDoUrl, string pat)
@@ -101,7 +103,7 @@ namespace AzDOAddIn
             if (parentId > 0)
             {
                 string relDef = "{\"op\": \"add\",\"path\": \"/relations/-\",\"value\": {" + 
-                    string.Format(relTemplate, "System.LinkTypes.Hierarchy-Reverse", azDoUrl, parentId) + "}}";
+                    string.Format(relTemplate, ParenLinkName, azDoUrl, parentId) + "}}";
 
                 body += "," + relDef;
             }
@@ -109,6 +111,34 @@ namespace AzDOAddIn
             body = "[" + body + "]";
 
             return PostWorkItem(azDoUrl, teamProject, pat, workItemType, body);
+        }
+
+        public static WorkItem AddParentLink(string azDoUrl, string teamProject, string pat, int id, int parentId)
+        {
+            string body = "[{\"op\": \"add\",\"path\":\"/relations/-\",\"value\": {\"rel\": \"" +
+                 ParenLinkName + "\", \"url\": \"" + azDoUrl + "/_apis/wit/workItems/" + parentId +"\"}}]";
+
+            return PatchWorkItem(azDoUrl, teamProject, pat, id, body);
+        }
+
+        public static WorkItem RemoveParentLink(string azDoUrl, string teamProject, string pat, int id)
+        {
+            WorkItem workItem = GetWorkItem(azDoUrl, teamProject, id, pat);
+
+            int parentIndex = -1;
+
+            for (int i = 0; i < workItem.relations.Length; i++)
+                if (workItem.relations[i].rel == ParenLinkName)
+                {
+                    parentIndex = i;
+                    break;
+                }
+
+            if (parentIndex == -1) return workItem;
+
+            string body = "[{\"op\": \"remove\",\"path\": \"/relations/" + parentIndex + "\"}]";
+
+            return PatchWorkItem(azDoUrl, teamProject, pat, id, body);
         }
 
         public static WorkItem PostWorkItem(string azDoUrl, string teamProject, string pat, string workItemType, string body)

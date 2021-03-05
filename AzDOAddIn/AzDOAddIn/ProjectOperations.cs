@@ -116,6 +116,26 @@ namespace AzDOAddIn
 
                     var workItem = AzDORestApiHelper.UpdateWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, fields);
 
+                    if (workItem.fields.ContainsKey(WorkItemSystemFileds.Parent) && task.OutlineLevel == 1)
+                        workItem = AzDORestApiHelper.RemoveParentLink(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId);
+
+                    if(task.OutlineLevel > 1)
+                    {
+                        int parentWiId = GetProjectTaskWorkItedId(task.OutlineParent);
+
+                        if (parentWiId > 0)
+                        {
+                            if (!workItem.fields.ContainsKey(WorkItemSystemFileds.Parent))
+                                workItem = AzDORestApiHelper.AddParentLink(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, parentWiId);
+                            else
+                                if (parentWiId != (long)workItem.fields[WorkItemSystemFileds.Parent])
+                                {
+                                    AzDORestApiHelper.RemoveParentLink(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId);
+                                    workItem = AzDORestApiHelper.AddParentLink(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, parentWiId);
+                                }
+                        }
+                    }
+
                     AddCoreFields(task, workItem);
                 }
             }
