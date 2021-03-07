@@ -34,16 +34,23 @@ namespace AzDOAddIn.Forms
 
         private void btn_GetTeamProjects_Click(object sender, EventArgs e)
         {
-            var projects = AzDORestApiHelper.GetTeamProjects(Url, PAT);
-
-            cmdBox_TeamProjects.Items.Clear();
-
-            foreach (var project in projects.TeamProjects) cmdBox_TeamProjects.Items.Add(project.name);
-
-            if (cmdBox_TeamProjects.Items.Count > 0)
+            try
             {
-                cmdAzDoUrl.Enabled = false;
-                txtBox_PAT.Enabled = false;
+                var projects = AzDORestApiHelper.GetTeamProjects(Url, PAT);
+
+                cmdBox_TeamProjects.Items.Clear();
+
+                foreach (var project in projects.TeamProjects) cmdBox_TeamProjects.Items.Add(project.name);
+
+                if (cmdBox_TeamProjects.Items.Count > 0)
+                {
+                    cmdAzDoUrl.Enabled = false;
+                    txtBox_PAT.Enabled = false;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -51,6 +58,26 @@ namespace AzDOAddIn.Forms
         {
             if (Url != "")
                 PAT = PatHelper.GetPat(Url);
+        }
+
+        private void btn_UpdatePAT_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Url.Length == 0) return;
+
+                var projects = AzDORestApiHelper.GetTeamProjects(Url, PAT);
+
+                if (projects.count > 0)
+                {
+                    this.DialogResult = DialogResult.Yes;
+                    this.Close();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -78,7 +78,7 @@ namespace AzDOAddIn
 
             string queryText = string.Format("SELECT [System.Id] FROM WorkItemLinks WHERE ([Source].[System.Id] = {0}) And ([System.Links.LinkType] = 'System.LinkTypes.Hierarchy-Forward') ORDER BY [System.Id] mode(MayContain)", wiId);
 
-            var result = GetWiqlResult(azDoUrl, teamProject, queryText, "");
+            var result = GetWiqlResult(azDoUrl, teamProject, queryText, pat);
 
             if (result.workItemRelations != null && result.workItemRelations.Count() > 0)
                 foreach (var relation in result.workItemRelations)
@@ -217,6 +217,16 @@ namespace AzDOAddIn
                     responceContent = requestResponse.Content.ReadAsStringAsync().Result;
                 else
                 {
+                    if (requestResponse.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new System.Exception("401: Unauthorized");
+                    }
+
+                    if (requestResponse.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new System.Exception("404: Not Found");
+                    }
+
                     responceContent = requestResponse.Content.ReadAsStringAsync().Result;
                     throw new System.Exception(responceContent);
 #warning process errors here!!

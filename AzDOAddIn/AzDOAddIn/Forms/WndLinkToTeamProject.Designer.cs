@@ -37,6 +37,7 @@
             this.btn_OK = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.cmdAzDoUrl = new System.Windows.Forms.ComboBox();
+            this.btn_UpdatePAT = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -94,7 +95,7 @@
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(188, 112);
+            this.btn_OK.Location = new System.Drawing.Point(149, 112);
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(75, 23);
             this.btn_OK.TabIndex = 7;
@@ -105,7 +106,7 @@
             // btn_Cancel
             // 
             this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btn_Cancel.Location = new System.Drawing.Point(313, 112);
+            this.btn_Cancel.Location = new System.Drawing.Point(379, 112);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_Cancel.TabIndex = 8;
@@ -121,6 +122,17 @@
             this.cmdAzDoUrl.TabIndex = 9;
             this.cmdAzDoUrl.SelectedIndexChanged += new System.EventHandler(this.cmdAzDoUrl_SelectedIndexChanged);
             // 
+            // btn_UpdatePAT
+            // 
+            this.btn_UpdatePAT.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btn_UpdatePAT.Location = new System.Drawing.Point(266, 112);
+            this.btn_UpdatePAT.Name = "btn_UpdatePAT";
+            this.btn_UpdatePAT.Size = new System.Drawing.Size(75, 23);
+            this.btn_UpdatePAT.TabIndex = 10;
+            this.btn_UpdatePAT.Text = "Update PAT";
+            this.btn_UpdatePAT.UseVisualStyleBackColor = true;
+            this.btn_UpdatePAT.Click += new System.EventHandler(this.btn_UpdatePAT_Click);
+            // 
             // WndLinkToTeamProject
             // 
             this.AcceptButton = this.btn_OK;
@@ -129,6 +141,7 @@
             this.CancelButton = this.btn_Cancel;
             this.ClientSize = new System.Drawing.Size(636, 147);
             this.ControlBox = false;
+            this.Controls.Add(this.btn_UpdatePAT);
             this.Controls.Add(this.cmdAzDoUrl);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_OK);
@@ -157,5 +170,6 @@
         private System.Windows.Forms.Button btn_OK;
         private System.Windows.Forms.Button btn_Cancel;
         private System.Windows.Forms.ComboBox cmdAzDoUrl;
+        private System.Windows.Forms.Button btn_UpdatePAT;
     }
 }

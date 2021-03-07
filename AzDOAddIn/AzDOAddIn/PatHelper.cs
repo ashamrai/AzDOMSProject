@@ -80,18 +80,27 @@ namespace AzDOAddIn
             {
                 pats = DecryptPats();
 
+                bool urlExist = false;
+
                 for (int i = 0; i < pats.Dictionary.Count; i++)
                 {
-                    if (pats.Dictionary[i].Key == url && pats.Dictionary[i].Value != pat)
+                    if (pats.Dictionary[i].Key == url)
                     {
-                        pats.Dictionary.RemoveAt(i);
+                        urlExist = true;
 
-                        pats.Dictionary = new List<KeyValuePair<string, string>>();
-                        pats.Dictionary.Add(new KeyValuePair<string, string>() { Key = url, Value = pat });
+                        if (pats.Dictionary[i].Value != pat)
+                        {
+                            pats.Dictionary.RemoveAt(i);
 
-                        break;
+                            pats.Dictionary.Add(new KeyValuePair<string, string>() { Key = url, Value = pat });
+
+                            break;
+                        }
                     }
                 }
+
+                if (!urlExist)
+                    pats.Dictionary.Add(new KeyValuePair<string, string>() { Key = url, Value = pat });
             }
             else
             {

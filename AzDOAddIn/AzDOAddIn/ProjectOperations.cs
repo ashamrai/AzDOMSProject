@@ -53,8 +53,10 @@ namespace AzDOAddIn
 
         internal static void UpdateProjectPlan()
         {
+            AppObj.StatusBar = "Update Project Plan";
+
             try
-            {
+            {                
                 for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
                 {
                     int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
@@ -70,6 +72,8 @@ namespace AzDOAddIn
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            AppObj.StatusBar = "Ready";
         }
 
         private static void AddWork(MSProject.Task task, RestApiClasses.WorkItem workItem)
@@ -100,6 +104,8 @@ namespace AzDOAddIn
 
         private static void PublishChanges(MSProject.Task task)
         {
+            AppObj.StatusBar = "Publish Changes to Azure DevOps";
+
             try
             {
                 string wiName = task.Name;
@@ -149,6 +155,8 @@ namespace AzDOAddIn
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            AppObj.StatusBar = "Ready";
         }
 
         internal static void ImportTeamMembers()
@@ -314,7 +322,9 @@ namespace AzDOAddIn
             {
                 Forms.WndLinkToTeamProject linkForm = new Forms.WndLinkToTeamProject();
 
-                if (linkForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                var formResult = linkForm.ShowDialog();
+
+                if (formResult == System.Windows.Forms.DialogResult.OK)
                 {
                     SaveDocSetting(PlanDocProperties.AzDoUrl, linkForm.Url);
                     SaveDocSetting(PlanDocProperties.AzDoTeamProject, linkForm.TeamProject);
@@ -327,9 +337,19 @@ namespace AzDOAddIn
                         workItemTypesForm.AddWorkItemTypeToList(item.name);
 
                     if (workItemTypesForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
                         SaveDocSetting(PlanDocProperties.AzDoWorkItemTypes, workItemTypesForm.SelectedItems());
+                        UpdateView();
+                    }
 
                     PatHelper.SetPat(linkForm.Url, linkForm.PAT);
+                }
+                else
+                {
+                    if (formResult == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        PatHelper.SetPat(linkForm.Url, linkForm.PAT);
+                    }
                 }
             }
             catch (Exception ex)
