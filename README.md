@@ -38,3 +38,14 @@ To synchronize work items with plan tasks, you should associate your MS Project 
 ![Work Item Types](/images/work_items_list.png)
 
 5. Save changes
+
+## Add Azure DevOps columns
+To view Work Item ID, State, Type, and other work item fields:
+
+1. Press Add columns button.
+
+![Add Columns](/images/add_columns.png)
+
+2. Then move them to a suitable place.
+
+![Azure DevOps Columns](/images/devops_columns.png)
