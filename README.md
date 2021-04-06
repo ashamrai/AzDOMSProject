@@ -42,10 +42,20 @@ To synchronize work items with plan tasks, you should associate your MS Project 
 ## Add Azure DevOps columns
 To view Work Item ID, State, Type, and other work item fields:
 
-1. Press Add columns button.
+1. Press **Add columns** button.
 
 ![Add Columns](/images/add_columns.png)
 
 2. Then move them to a suitable place.
 
 ![Azure DevOps Columns](/images/devops_columns.png)
+
+## Import Azure DevOps team members
+Each MS Project resource in a project plan must be equal to the Display Name of the corresponding team member. The solution may import necessary team members to avoid errors.
+1. Press **Import Team Members** button
+
+![Add Team Members](/images/import_users.png)
+
+2. Select a group with team members and press **Ok**.
+
+![Team Groups](/images/team_to_import.png)
