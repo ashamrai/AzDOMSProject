@@ -80,3 +80,16 @@ Each MS Project resource in a project plan must be equal to the Display Name of 
 5.	Each published task in the plan will have an assigned Work Item ID and Type.
 
 ![Published Plan](/images/pulished_tasks.png)
+
+## Get Work Items Updates
+1.	Each team member may update the state and completed work in a work item. 
+
+![Updated Work Item](/images/updated_work_item.png)
+
+2.	To see these updates, you have to update your project plan.
+
+![Update Plan](/images/update_plan.png)
+
+3.	Updated plan:
+
+![Updated Plan](/images/updated_plan.png)
