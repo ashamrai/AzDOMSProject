@@ -59,3 +59,24 @@ Each MS Project resource in a project plan must be equal to the Display Name of 
 2. Select a group with team members and press **Ok**.
 
 ![Team Groups](/images/team_to_import.png)
+
+## Plan Work Items
+1.	Create a task list in your plan with the necessary hierarchy and dates. Add Work Item Type value to each task in the plan.
+
+![Projet Plan](/images/plan_workitems.png)
+
+2.	To save planned dates, set the project baseline.
+
+![Baseline](/images/set_baseline.png)
+
+3.	Next, press Publish Work Items button.
+
+![Publish](/images/publish.png)
+
+4.	The solution creates new work items in the linked Azure DevOps Project.
+
+![Work Items](/images/work_items.png)
+
+5.	Each published task in the plan will have an assigned Work Item ID and Type.
+
+![Published Plan](/images/pulished_tasks.png)
