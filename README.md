@@ -81,6 +81,24 @@ Each MS Project resource in a project plan must be equal to the Display Name of 
 
 ![Published Plan](/images/pulished_tasks.png)
 
+## Import Work Items
+To import exisitng work items to a plan:
+1. Press **Get Work Items** button
+
+![Get Work Items](/images/import_work_items.png)
+
+2. Type Work Item Id, and press **Search** button. Then find work item in the list, and press **Ok**.
+
+![Get Work Item](/images/get_work_item.png)
+
+3. The updated plan:
+
+![Project Plan](/images/imported_work_item_in_plan.png)
+
+4. If a work item contains child work items, you can import them by **Import Childs** button.
+
+![Import Childs](/images/import_childs.png)
+
 ## Get Work Items Updates
 1.	Each team member may update the state and completed work in a work item. 
 
