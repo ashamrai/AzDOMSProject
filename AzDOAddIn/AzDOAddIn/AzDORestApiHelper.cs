@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AzDOAddIn.RestApiClasses;
 using Microsoft.Office.Interop.MSProject;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace AzDOAddIn
 {
@@ -172,10 +173,18 @@ namespace AzDOAddIn
             return InvokeRestApiRequest<WorkItem>(RequestMethod.PATCH, requestUrl, body, pat);
         }
 
+        public static ClassificationNode GetIterationNode(string azDoUrl, string teamProject, string pat, string path)
+        {
+            string requestUrl = string.Format("{0}/{1}/_apis/wit/classificationnodes/Iterations/{2}?api-version={3}", azDoUrl, teamProject, path, RestApiVersion);
+
+            return InvokeRestApiRequest<ClassificationNode>(RequestMethod.GET, requestUrl, pat: pat);
+        }
+
         static T InvokeRestApiRequest<T>(string requestMethod, string requestUrl, string requestBody = "", string pat = "")
         {
             HttpResponseMessage requestResponse = null;
             string responceContent = null;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             HttpClient httpClient;
             if (pat != "")

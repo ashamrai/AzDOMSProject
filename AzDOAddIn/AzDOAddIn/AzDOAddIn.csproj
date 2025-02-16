@@ -26,14 +26,37 @@
     <NoStandardLibraries>false</NoStandardLibraries>
     <RootNamespace>AzDOAddIn</RootNamespace>
     <AssemblyName>AzDOAddIn</AssemblyName>
-    <LoadBehavior>3</LoadBehavior>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
     <TargetFrameworkProfile />
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <ProductName>AzDOAddIn</ProductName>
+    <PublisherName />
+    <SupportUrl />
+    <FriendlyName>AzDOAddIn</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
   </PropertyGroup>
   <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
@@ -101,8 +124,8 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -166,6 +189,12 @@
     <Compile Include="Forms\GetWorkItemsForm.Designer.cs">
       <DependentUpon>GetWorkItemsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Teams.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,12 +214,16 @@
       <DependentUpon>WorkItemTypes.cs</DependentUpon>
     </Compile>
     <Compile Include="PatHelper.cs" />
+    <Compile Include="PlanSettings.cs" />
     <Compile Include="ProjectOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Forms\GetWorkItemsForm.resx">
       <DependentUpon>GetWorkItemsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Teams.resx">
       <DependentUpon>Teams.cs</DependentUpon>
@@ -228,6 +261,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RestApiClasses\ClassificationNode.cs" />
     <Compile Include="RestApiClasses\TeamMember.cs" />
     <Compile Include="RestApiClasses\TeamProjectReference.cs" />
     <Compile Include="RestApiClasses\WebApiTeam.cs" />
@@ -272,6 +306,9 @@
   <ItemGroup>
     <Resource Include="Resources\inbox.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\settings.png" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -283,7 +320,14 @@
     <ManifestKeyFile>AzDOAddIn_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D2339B9DC8C748DE2B71459F6A1F5485149818B9</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6911D36C3C7441CA656C152D7CC3172F4573C997</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,49 +21,37 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0C9AC248D7CFF2288DBC71D69C086E1B"
-        "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_0D679CCC000A47FEAB8CDCC5B612B32D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_20C9514B3ADC30AEA379EA8420F82AB0"
+        "MsmKey" = "8:_2D09843DD7B1C2F71CAD9381494E0124"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3A346BAAC87D780E355179D6F3CBDC31"
-        "OwnerKey" = "8:_0C9AC248D7CFF2288DBC71D69C086E1B"
+        "MsmKey" = "8:_36E36B97E3FCDC825FD28A3CB8185793"
+        "OwnerKey" = "8:_2D09843DD7B1C2F71CAD9381494E0124"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3A346BAAC87D780E355179D6F3CBDC31"
+        "MsmKey" = "8:_36E36B97E3FCDC825FD28A3CB8185793"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_49AFD6A3BBDEA315DDAFE4E128DBB55D"
-        "OwnerKey" = "8:_4C0FF8671C02ABC87B40A12BF38B9AFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_49AFD6A3BBDEA315DDAFE4E128DBB55D"
+        "MsmKey" = "8:_40ECB1F1588AE87B64420530746FCEF9"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4C0FF8671C02ABC87B40A12BF38B9AFF"
+        "MsmKey" = "8:_4E805D7B60C3BE41E5E9B3D70FA9CAA7"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,19 +63,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_64024890388181C3B00343FEA172B080"
+        "MsmKey" = "8:_68FAA0536E1DBD3C6706DFD02DF8A78E"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7968B727418802B68210C5801C1FE182"
-        "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_81EBC893A1B4056A4E8E9ABEE66413B2"
+        "MsmKey" = "8:_AAD9F1A59E8926A98AC602EBB5791BFB"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -99,6 +81,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C40D3913D551B6B50703FB6F8B5BC303"
+        "OwnerKey" = "8:_68FAA0536E1DBD3C6706DFD02DF8A78E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C40D3913D551B6B50703FB6F8B5BC303"
+        "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F69D128421F468B3DD7412311859782D"
+        "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5BEA6CA76E6C48389BC8C5422D2EB302"
         "MsmSig" = "8:_UNDEFINED"
@@ -106,49 +106,49 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_81EBC893A1B4056A4E8E9ABEE66413B2"
+        "OwnerKey" = "8:_40ECB1F1588AE87B64420530746FCEF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_64024890388181C3B00343FEA172B080"
+        "OwnerKey" = "8:_2D09843DD7B1C2F71CAD9381494E0124"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0C9AC248D7CFF2288DBC71D69C086E1B"
+        "OwnerKey" = "8:_36E36B97E3FCDC825FD28A3CB8185793"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3A346BAAC87D780E355179D6F3CBDC31"
+        "OwnerKey" = "8:_AAD9F1A59E8926A98AC602EBB5791BFB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_20C9514B3ADC30AEA379EA8420F82AB0"
+        "OwnerKey" = "8:_68FAA0536E1DBD3C6706DFD02DF8A78E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4C0FF8671C02ABC87B40A12BF38B9AFF"
+        "OwnerKey" = "8:_C40D3913D551B6B50703FB6F8B5BC303"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_49AFD6A3BBDEA315DDAFE4E128DBB55D"
+        "OwnerKey" = "8:_F69D128421F468B3DD7412311859782D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7968B727418802B68210C5801C1FE182"
+        "OwnerKey" = "8:_4E805D7B60C3BE41E5E9B3D70FA9CAA7"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -178,10 +178,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.8"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    "Name" = "8:Microsoft .NET Framework 4.8 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.8"
                     }
                 }
             }
@@ -210,10 +210,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.8"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    "Name" = "8:Microsoft .NET Framework 4.8 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.8"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.VSTORuntime.4.0"
                     {
@@ -243,7 +243,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.7.2"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.8"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
                 }
@@ -271,14 +271,34 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0C9AC248D7CFF2288DBC71D69C086E1B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D679CCC000A47FEAB8CDCC5B612B32D"
+            {
+            "SourcePath" = "8:..\\AzDOAddIn\\bin\\Release\\AzDOAddIn.dll.config"
+            "TargetName" = "8:AzDOAddIn.dll.config"
+            "Tag" = "8:"
+            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2D09843DD7B1C2F71CAD9381494E0124"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0C9AC248D7CFF2288DBC71D69C086E1B"
+                    "_2D09843DD7B1C2F71CAD9381494E0124"
                     {
                     "Name" = "8:Microsoft.Office.Tools.v4.0.Framework.dll"
                     "Attributes" = "3:512"
@@ -302,65 +322,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D679CCC000A47FEAB8CDCC5B612B32D"
-            {
-            "SourcePath" = "8:..\\AzDOAddIn\\bin\\Release\\AzDOAddIn.dll.config"
-            "TargetName" = "8:AzDOAddIn.dll.config"
-            "Tag" = "8:"
-            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_20C9514B3ADC30AEA379EA8420F82AB0"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_20C9514B3ADC30AEA379EA8420F82AB0"
-                    {
-                    "Name" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3A346BAAC87D780E355179D6F3CBDC31"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_36E36B97E3FCDC825FD28A3CB8185793"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_3A346BAAC87D780E355179D6F3CBDC31"
+                    "_36E36B97E3FCDC825FD28A3CB8185793"
                     {
                     "Name" = "8:Microsoft.VisualStudio.Tools.Applications.Runtime.dll"
                     "Attributes" = "3:512"
@@ -384,20 +353,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49AFD6A3BBDEA315DDAFE4E128DBB55D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_40ECB1F1588AE87B64420530746FCEF9"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_49AFD6A3BBDEA315DDAFE4E128DBB55D"
+                    "_40ECB1F1588AE87B64420530746FCEF9"
                     {
-                    "Name" = "8:Microsoft.Office.Tools.dll"
+                    "Name" = "8:Newtonsoft.Json.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Microsoft.Office.Tools.dll"
+            "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
@@ -411,80 +380,18 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4C0FF8671C02ABC87B40A12BF38B9AFF"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_4C0FF8671C02ABC87B40A12BF38B9AFF"
-                    {
-                    "Name" = "8:Microsoft.Office.Tools.Common.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.Office.Tools.Common.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_64024890388181C3B00343FEA172B080"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                    "_64024890388181C3B00343FEA172B080"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7968B727418802B68210C5801C1FE182"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4E805D7B60C3BE41E5E9B3D70FA9CAA7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_7968B727418802B68210C5801C1FE182"
+                    "_4E805D7B60C3BE41E5E9B3D70FA9CAA7"
                     {
                     "Name" = "8:stdole.dll"
                     "Attributes" = "3:512"
@@ -508,20 +415,51 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_81EBC893A1B4056A4E8E9ABEE66413B2"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_68FAA0536E1DBD3C6706DFD02DF8A78E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_81EBC893A1B4056A4E8E9ABEE66413B2"
+                    "_68FAA0536E1DBD3C6706DFD02DF8A78E"
                     {
-                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Name" = "8:Microsoft.Office.Tools.Common.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "SourcePath" = "8:Microsoft.Office.Tools.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AAD9F1A59E8926A98AC602EBB5791BFB"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_AAD9F1A59E8926A98AC602EBB5791BFB"
+                    {
+                    "Name" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
@@ -557,6 +495,68 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C40D3913D551B6B50703FB6F8B5BC303"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C40D3913D551B6B50703FB6F8B5BC303"
+                    {
+                    "Name" = "8:Microsoft.Office.Tools.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Office.Tools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F69D128421F468B3DD7412311859782D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_F69D128421F468B3DD7412311859782D"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBD7C7A509274229BCB0D18F0CADC967"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -616,7 +616,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Azure DevOps AddIn"
         "ProductCode" = "8:{1026313A-1CD3-4140-8A30-24524BEF756A}"
-        "PackageCode" = "8:{E7CB9D88-FBBD-413A-80BA-9E391228DF8E}"
+        "PackageCode" = "8:{25FBE94D-7306-4BB2-8619-268BDE8B3D02}"
         "UpgradeCode" = "8:{0C9FB207-45FB-4132-AEEE-077B6966672F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

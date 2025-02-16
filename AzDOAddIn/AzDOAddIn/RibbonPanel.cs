@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AzDOAddIn.Forms;
 using Microsoft.Office.Tools.Ribbon;
 
 namespace AzDOAddIn
@@ -50,6 +51,18 @@ namespace AzDOAddIn
         private void btn_ImportTeamMembers_Click(object sender, RibbonControlEventArgs e)
         {
             ProjectOperations.ImportTeamMembers();
+        }
+
+        private void btn_Settings_Click(object sender, RibbonControlEventArgs e)
+        {
+            Forms.SettingsForm settingsForm = new Forms.SettingsForm();
+
+            settingsForm.UpdateSettingsValues(ProjectOperations.GetPlanSettings());
+
+            if (settingsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ProjectOperations.SavePlanningSettings(settingsForm.useSprintStartDate);
+            }
         }
     }
 }

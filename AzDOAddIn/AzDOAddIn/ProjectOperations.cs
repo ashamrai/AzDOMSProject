@@ -9,12 +9,26 @@ using Office = Microsoft.Office.Core;
 using AzDOAddIn.AzDOAddInSettings;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using AzDOAddIn.RestApiClasses;
+using Microsoft.Office.Interop.MSProject;
 
 namespace AzDOAddIn
 {
     static class ProjectOperations
     {
-        internal static MSProject.Application AppObj { get; set; }
+        static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
+        static MSProject.Task SelectedTask { get { return (AppObj.ActiveSelection.Tasks == null) ? null : AppObj.ActiveSelection.Tasks[1]; } }
+        static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }
+        static internal string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
+        static internal string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
+        static internal string ActivePAT { get { return PatHelper.GetPat(ActiveOrgUrl); } }
+
+        static class SyncSettings
+        {
+            public static bool useSprintStartDate = false;
+        }
+
+        internal static MSProject.Application AppObj { get; set; }        
 
         internal static bool TeamProjectLinked
         {
@@ -40,6 +54,20 @@ namespace AzDOAddIn
             }
         }
 
+        public static PlanningSettings GetPlanSettings()
+        {
+            if (CheckDocProperty(PlanDocProperties.PlanningSettings) == 0)
+                return null;
+
+            string planningJson = GetDocProperty(PlanDocProperties.PlanningSettings);
+
+            PlanningSettings planningSettings = JsonConvert.DeserializeObject<PlanningSettings>(planningJson);
+
+            SyncSettings.useSprintStartDate = planningSettings.useSprintStartDate;
+
+            return planningSettings;
+        }
+
         private static bool CheckUserInResources(string name)
         {
             if (ActiveProject.Resources.Count == 0) return false;
@@ -59,7 +87,7 @@ namespace AzDOAddIn
             {                
                 for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
                 {
-                    int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
+                    int wiPrjId = GetProjectTaskWorkItemId(ActiveProject.Tasks[i]);
 
                     if (wiPrjId == 0) continue;
 
@@ -68,7 +96,7 @@ namespace AzDOAddIn
                     AddWork(ActiveProject.Tasks[i], workItem);
                 }
             }
-            catch(Exception ex)
+            catch(System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -90,13 +118,13 @@ namespace AzDOAddIn
             {
                 for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
                 {
-                    int wiPrjId = GetProjectTaskWorkItedId(ActiveProject.Tasks[i]);
+                    int wiPrjId = GetProjectTaskWorkItemId(ActiveProject.Tasks[i]);
 
                     if (wiPrjId > 0) { PublishChanges(ActiveProject.Tasks[i]); }
                     else { PublishNewWorkItem(ActiveProject.Tasks[i]); }
                 }
             }
-            catch(Exception ex)
+            catch(System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -109,11 +137,11 @@ namespace AzDOAddIn
             try
             {
                 string wiName = task.Name;
-                if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
+                if (string.IsNullOrEmpty(wiName)) throw new System.Exception(string.Format("Task [{0}] without name", task.ID));
 
                 if (WorkItemTreeInConsistency(task))
                 {
-                    int wiId = GetProjectTaskWorkItedId(task);
+                    int wiId = GetProjectTaskWorkItemId(task);
                     Dictionary<string, string> fields = new Dictionary<string, string>();
                     fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
                     AddBaselineDates(task, fields);
@@ -133,7 +161,7 @@ namespace AzDOAddIn
 
                     if(task.OutlineLevel > 1)
                     {
-                        int parentWiId = GetProjectTaskWorkItedId(task.OutlineParent);
+                        int parentWiId = GetProjectTaskWorkItemId(task.OutlineParent);
 
                         if (parentWiId > 0)
                         {
@@ -151,7 +179,7 @@ namespace AzDOAddIn
                     AddCoreFields(task, workItem);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -190,7 +218,7 @@ namespace AzDOAddIn
                     }
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -204,7 +232,7 @@ namespace AzDOAddIn
                 if (string.IsNullOrEmpty(wiType)) return;
 
                 string wiName = task.Name;
-                if (string.IsNullOrEmpty(wiName)) throw new Exception(string.Format("Task [{0}] without name", task.ID));
+                if (string.IsNullOrEmpty(wiName)) throw new System.Exception(string.Format("Task [{0}] without name", task.ID));
 
                 int parentId = 0;
 
@@ -216,7 +244,7 @@ namespace AzDOAddIn
 
                     if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
 
-                    if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItedId(task.OutlineParent);
+                    if (task.OutlineLevel > 1) parentId = GetProjectTaskWorkItemId(task.OutlineParent);
 
                     string area = GetStringFieldValue(task, PlanCoreColumns.WIArea.PjValue);
                     string iteration = GetStringFieldValue(task, PlanCoreColumns.WIIteration.PjValue);
@@ -229,7 +257,7 @@ namespace AzDOAddIn
                     AddCoreFields(task, workItem);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -259,14 +287,14 @@ namespace AzDOAddIn
         {
             if (task.OutlineLevel > 2)
             {
-                if (GetProjectTaskWorkItedId(task.OutlineParent) != 0) return true;
+                if (GetProjectTaskWorkItemId(task.OutlineParent) != 0) return true;
 
                 MSProject.Task ancestor = task.OutlineParent.OutlineParent;
 
                 do
                 {
-                    if (GetProjectTaskWorkItedId(ancestor) > 0) 
-                        throw new Exception(string.Format("Task [{0}]:\"{1}\"\n should have a parent work item in the plan", 
+                    if (GetProjectTaskWorkItemId(ancestor) > 0) 
+                        throw new System.Exception(string.Format("Task [{0}]:\"{1}\"\n should have a parent work item in the plan", 
                             task.ID, (task.Name.Length > 20) ? task.Name.Substring(0, 17) + "..." : task.Name));
 
                     ancestor = ancestor.OutlineParent;
@@ -277,12 +305,12 @@ namespace AzDOAddIn
             return true;
         }
 
-        private static int GetProjectTaskWorkItedId(MSProject.Task task)
+        private static int GetProjectTaskWorkItemId(MSProject.Task task)
         {
             return GetIntFieldValue(task, PlanCoreColumns.WIId.PjValue);
         }
 
-        private static string GetProjectTaskWorkItedState(MSProject.Task task)
+        private static string GetProjectTaskWorkItemState(MSProject.Task task)
         {
             return GetStringFieldValue(task, PlanCoreColumns.WIState.PjValue);
         }
@@ -290,14 +318,7 @@ namespace AzDOAddIn
         private static string GetProjectTaskWorkItedType(MSProject.Task task)
         {
             return GetStringFieldValue(task, PlanCoreColumns.WIType.PjValue);
-        }
-
-        static MSProject.Project ActiveProject { get { return AppObj.ActiveProject; } }
-        static MSProject.Task SelectedTask { get { return (AppObj.ActiveSelection.Tasks == null) ? null : AppObj.ActiveSelection.Tasks[1]; } }
-        static DocumentProperties DocPropeties { get { return ActiveProject.CustomDocumentProperties; } }        
-        static internal string ActiveTeamProject { get { return GetDocProperty(PlanDocProperties.AzDoTeamProject); } }
-        static internal string ActiveOrgUrl { get { return GetDocProperty(PlanDocProperties.AzDoUrl); } }
-        static internal string ActivePAT { get { return PatHelper.GetPat(ActiveOrgUrl); } }
+        }       
 
 
         static int CheckDocProperty(string propertyName)
@@ -352,7 +373,7 @@ namespace AzDOAddIn
                     }
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -370,11 +391,19 @@ namespace AzDOAddIn
 
         internal static void AddWorkItemsToPlan(List<int> wiIds)
         {
-            foreach(int wiId in wiIds)
+            try
             {
-                var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, ActivePAT);
+                GetPlanSettings();
+                foreach (int wiId in wiIds)
+                {
+                    var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, ActivePAT);
 
-                MSProject.Task projectTask = AddWorkItem(workItem);
+                    MSProject.Task projectTask = AddWorkItemToPlan(workItem);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -382,6 +411,8 @@ namespace AzDOAddIn
         {
             try
             {
+                GetPlanSettings();
+
                 var currentTask = SelectedTask;
 
                 if (currentTask == null) return;
@@ -396,16 +427,18 @@ namespace AzDOAddIn
 
                 foreach (var workItem in workItems)
                 {
-                    AddWorkItem(workItem, currentTask);
+                    string wiType = workItem.fields[PlanCoreColumns.WIType.AzDORefName].ToString();
+                    if (wiType == "Feature" || wiType == "User Story" || wiType == "Task")
+                        AddWorkItemToPlan(workItem, currentTask);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private static MSProject.Task AddWorkItem(RestApiClasses.WorkItem workItem, MSProject.Task parentTask = null)
+        private static MSProject.Task AddWorkItemToPlan(RestApiClasses.WorkItem workItem, MSProject.Task parentTask = null)
         {
             if (GetPlanTaskByWorkItemId(workItem.id) != null) return null;
 
@@ -417,6 +450,7 @@ namespace AzDOAddIn
                 (taskInsertPosition == 0) ? Type.Missing : taskInsertPosition);
 
             AddCoreFields(projectTask, workItem);
+            AddPlanFields(projectTask, workItem);
 
             if (workItem.fields.ContainsKey(PlanCoreColumns.WIAssignedTo.AzDORefName))
             {
@@ -431,6 +465,32 @@ namespace AzDOAddIn
                     projectTask.OutlineOutdent();
 
             return projectTask;
+        }
+
+        private static void AddPlanFields(MSProject.Task projectTask, WorkItem workItem)
+        {
+            string wiType = workItem.fields[PlanCoreColumns.WIType.AzDORefName].ToString();
+
+            if ((wiType == "Product Backlog Item" || wiType == "Requirement" || wiType == "User Story" || wiType == "Task") && SyncSettings.useSprintStartDate)
+            {
+                if (workItem.fields[PlanCoreColumns.WIIteration.AzDORefName].ToString() == ActiveTeamProject) return;
+
+                string wiIteration = workItem.fields[PlanCoreColumns.WIIteration.AzDORefName].ToString().Replace(ActiveTeamProject + "\\", "");
+                var wiIterationValue = AzDORestApiHelper.GetIterationNode(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiIteration);
+
+                if (wiIterationValue.attributes != null)
+                {
+                    if (wiIterationValue.attributes.startDate != null)
+                        projectTask.Start = new DateTime(wiIterationValue.attributes.startDate.Year, wiIterationValue.attributes.startDate.Month, wiIterationValue.attributes.startDate.Day, 8, 0, 0);
+                    if (wiIterationValue.attributes.finishDate != null && wiType == "User Story" || wiType == "Product Backlog Item" || wiType == "Requirement")
+                        projectTask.Finish = new DateTime(wiIterationValue.attributes.finishDate.Year, wiIterationValue.attributes.finishDate.Month, wiIterationValue.attributes.finishDate.Day, 17, 0, 0); 
+                }
+
+                if (wiType == "Task" && workItem.fields.ContainsKey(WorkItemWorkFileds.Remaining))
+                {
+                    projectTask.Duration = (double)workItem.fields[WorkItemWorkFileds.Remaining] * 60;
+                }
+            }
         }
 
         private static void AddCoreFields(MSProject.Task projectTask, RestApiClasses.WorkItem workItem)
@@ -525,6 +585,14 @@ namespace AzDOAddIn
             }
         }
 
+        internal static void SavePlanningSettings(bool useSprintStartDate)
+        {
+            PlanningSettings planningSettings = new PlanningSettings();
+            planningSettings.useSprintStartDate = useSprintStartDate;
+
+            SaveDocSetting(PlanDocProperties.PlanningSettings, JsonConvert.SerializeObject(planningSettings));
+        }
+
         #region project table configs
 
         internal static void UpdateView()
@@ -555,7 +623,7 @@ namespace AzDOAddIn
             for (int i = 1; i < 100; i++)
             {
                 try { existingValues.Add(AppObj.CustomFieldValueListGetItem((MSProject.PjCustomField)PlanCoreColumns.WIType.PjValue, MSProject.PjValueListItem.pjValueListValue, i)); }
-                catch (Exception) { break; }
+                catch (System.Exception) { break; }
             }
 
             foreach (var mappedWorkItem in mappedWorkItems)
@@ -583,7 +651,7 @@ namespace AzDOAddIn
                                   Type.Missing, Type.Missing, fieldViewName, Type.Missing, ColumnWidth, 0, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 AppObj.TableApply(ActiveProject.CurrentTable);
             }
-        }
+        }        
 
         #endregion
     }

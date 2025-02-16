@@ -45,6 +45,7 @@
             this.group_Settings = this.Factory.CreateRibbonGroup();
             this.btn_ImportTeamMembers = this.Factory.CreateRibbonButton();
             this.btn_AddColumns = this.Factory.CreateRibbonButton();
+            this.btn_Settings = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group_Sync.SuspendLayout();
             this.group_Settings.SuspendLayout();
@@ -115,6 +116,7 @@
             // 
             this.group_Settings.Items.Add(this.btn_ImportTeamMembers);
             this.group_Settings.Items.Add(this.btn_AddColumns);
+            this.group_Settings.Items.Add(this.btn_Settings);
             this.group_Settings.Label = "Settings";
             this.group_Settings.Name = "group_Settings";
             // 
@@ -133,6 +135,14 @@
             this.btn_AddColumns.Name = "btn_AddColumns";
             this.btn_AddColumns.ShowImage = true;
             this.btn_AddColumns.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_AddColumns_Click);
+            // 
+            // btn_Settings
+            // 
+            this.btn_Settings.Image = global::AzDOAddIn.Properties.Resources.settings;
+            this.btn_Settings.Label = "Settings";
+            this.btn_Settings.Name = "btn_Settings";
+            this.btn_Settings.ShowImage = true;
+            this.btn_Settings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btn_Settings_Click);
             // 
             // RibbonPanel
             // 
@@ -162,6 +172,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetWorkItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportChilds;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_ImportTeamMembers;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btn_Settings;
     }
 
     partial class ThisRibbonCollection
