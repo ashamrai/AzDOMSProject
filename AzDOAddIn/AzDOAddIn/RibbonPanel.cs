@@ -57,11 +57,12 @@ namespace AzDOAddIn
         {
             Forms.SettingsForm settingsForm = new Forms.SettingsForm();
 
-            settingsForm.UpdateSettingsValues(ProjectOperations.GetPlanSettings());
+            settingsForm.UpdateSettingsValues(ProjectOperations.GetPlanSettings(), ProjectOperations.GetOperationalSettings());
 
             if (settingsForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ProjectOperations.SavePlanningSettings(settingsForm.useSprintStartDate);
+                ProjectOperations.SaveOperationalSettings(settingsForm.savePlan, settingsForm.workItemTag);
             }
         }
     }

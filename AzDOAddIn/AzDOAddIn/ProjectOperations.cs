@@ -26,6 +26,9 @@ namespace AzDOAddIn
         static class SyncSettings
         {
             public static bool useSprintStartDate = false;
+            public static bool savePlan = true;
+            public static string workItemTag = "";
+            public static string workItemTypes = "";
         }
 
         internal static MSProject.Application AppObj { get; set; }        
@@ -66,6 +69,21 @@ namespace AzDOAddIn
             SyncSettings.useSprintStartDate = planningSettings.useSprintStartDate;
 
             return planningSettings;
+        }
+
+        public static OperationalSettings GetOperationalSettings()
+        {
+            if (CheckDocProperty(PlanDocProperties.PlanningSettings) == 0)
+                return null;
+
+            string operationalJson = GetDocProperty(PlanDocProperties.OperationalSettings);
+
+            OperationalSettings operationalSettings = JsonConvert.DeserializeObject<OperationalSettings>(operationalJson);
+
+            SyncSettings.savePlan= operationalSettings.savePlan;
+            SyncSettings.workItemTag = operationalSettings.workItemTag;
+
+            return operationalSettings;
         }
 
         private static bool CheckUserInResources(string name)
@@ -116,6 +134,8 @@ namespace AzDOAddIn
         {
             try
             {
+                GetSettings();
+
                 for (int i = 1; i <= ActiveProject.Tasks.Count; i++)
                 {
                     int wiPrjId = GetProjectTaskWorkItemId(ActiveProject.Tasks[i]);
@@ -123,6 +143,8 @@ namespace AzDOAddIn
                     if (wiPrjId > 0) { PublishChanges(ActiveProject.Tasks[i]); }
                     else { PublishNewWorkItem(ActiveProject.Tasks[i]); }
                 }
+
+                if (SyncSettings.savePlan) ActiveProject.Application.FileSave();
             }
             catch(System.Exception ex)
             {
@@ -151,8 +173,8 @@ namespace AzDOAddIn
                     string area = GetStringFieldValue(task, PlanCoreColumns.WIArea.PjValue);
                     string iteration = GetStringFieldValue(task, PlanCoreColumns.WIIteration.PjValue);
 
-                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area);
-                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration);
+                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area.Replace("\\", "\\\\"));
+                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration.Replace("\\", "\\\\"));
 
                     var workItem = AzDORestApiHelper.UpdateWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiId, fields);
 
@@ -178,6 +200,7 @@ namespace AzDOAddIn
 
                     AddCoreFields(task, workItem);
                 }
+
             }
             catch (System.Exception ex)
             {
@@ -217,6 +240,8 @@ namespace AzDOAddIn
                         MessageBox.Show(teamMembersCount + " user(s) were imported to the plan", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
+
+                if (SyncSettings.savePlan) ActiveProject.Application.FileSave();
             }
             catch (System.Exception ex)
             {
@@ -239,7 +264,11 @@ namespace AzDOAddIn
                 if (WorkItemTreeInConsistency(task))
                 {
                     Dictionary<string, string> fields = new Dictionary<string, string>();
+                    
                     fields.Add(PlanCoreColumns.WITitle.AzDORefName, wiName);
+                    if (SyncSettings.workItemTag != "") fields.Add(PlanCoreColumns.WITags.AzDORefName, SyncSettings.workItemTag);
+
+
                     AddBaselineDates(task, fields);
 
                     if (task.Resources.Count == 1) fields.Add(PlanCoreColumns.WIAssignedTo.AzDORefName, task.Resources[1].Name);
@@ -393,13 +422,16 @@ namespace AzDOAddIn
         {
             try
             {
-                GetPlanSettings();
+                GetSettings();
+
                 foreach (int wiId in wiIds)
                 {
                     var workItem = AzDORestApiHelper.GetWorkItem(ActiveOrgUrl, ActiveTeamProject, wiId, ActivePAT);
 
                     MSProject.Task projectTask = AddWorkItemToPlan(workItem);
                 }
+
+                if (SyncSettings.savePlan) ActiveProject.Application.FileSave();
             }
             catch (System.Exception ex)
             {
@@ -407,11 +439,18 @@ namespace AzDOAddIn
             }
         }
 
+        private static void GetSettings()
+        {
+            GetPlanSettings();
+            GetOperationalSettings();
+            SyncSettings.workItemTypes = GetDocProperty(PlanDocProperties.AzDoWorkItemTypes);
+        }
+
         internal static void ImportChilds()
         {
             try
             {
-                GetPlanSettings();
+                GetSettings();
 
                 var currentTask = SelectedTask;
 
@@ -428,9 +467,11 @@ namespace AzDOAddIn
                 foreach (var workItem in workItems)
                 {
                     string wiType = workItem.fields[PlanCoreColumns.WIType.AzDORefName].ToString();
-                    if (wiType == "Feature" || wiType == "User Story" || wiType == "Task")
+                    if (SyncSettings.workItemTypes.Contains(wiType + ";"))
                         AddWorkItemToPlan(workItem, currentTask);
                 }
+
+                if (SyncSettings.savePlan) ActiveProject.Application.FileSave();
             }
             catch (System.Exception ex)
             {
@@ -593,6 +634,15 @@ namespace AzDOAddIn
             SaveDocSetting(PlanDocProperties.PlanningSettings, JsonConvert.SerializeObject(planningSettings));
         }
 
+        internal static void SaveOperationalSettings(bool savePlan, string workItemTag)
+        {
+            OperationalSettings operationalSettings = new OperationalSettings();
+            operationalSettings.savePlan = savePlan;
+            operationalSettings.workItemTag = workItemTag;
+
+            SaveDocSetting(PlanDocProperties.OperationalSettings, JsonConvert.SerializeObject(operationalSettings));
+        }
+
         #region project table configs
 
         internal static void UpdateView()
@@ -651,7 +701,7 @@ namespace AzDOAddIn
                                   Type.Missing, Type.Missing, fieldViewName, Type.Missing, ColumnWidth, 0, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 AppObj.TableApply(ActiveProject.CurrentTable);
             }
-        }        
+        }       
 
         #endregion
     }

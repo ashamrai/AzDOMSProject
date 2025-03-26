@@ -20,6 +20,7 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string Rev = "System.Rev";
         public const string TeamProject = "System.TeamProject";
         public const string Parent = "System.Parent";
+        public const string Tags = "System.Tags";
     }
 
     static class WorkItemWorkFileds
@@ -47,6 +48,7 @@ namespace AzDOAddIn.AzDOAddInSettings
         public const string AzDoTeamProject = "Azure DevOps Team Project";
         public const string AzDoWorkItemTypes = "Azure DevOps Work Item Types";
         public const string PlanningSettings = "Azure DevOps Planning Settings";
+        public const string OperationalSettings = "Azure DevOps Operational Settings";
     }
 
     public static class PlanCoreColumns
@@ -60,6 +62,7 @@ namespace AzDOAddIn.AzDOAddInSettings
         public static FieldPlanMapping WIIteration = new FieldPlanMapping { Name = "Iteration Path", PjValue = PjField.pjTaskText27, AzDORefName = WorkItemSystemFileds.Iteration };
         public static FieldPlanMapping WIArea = new FieldPlanMapping { Name = "Area Path", PjValue = PjField.pjTaskText28, AzDORefName = WorkItemSystemFileds.Area };
         public static FieldPlanMapping WIRev = new FieldPlanMapping { Name = "Work Item Rev", PjValue = PjField.pjTaskText29, AzDORefName = WorkItemSystemFileds.Rev };
+        public static FieldPlanMapping WITags = new FieldPlanMapping { Name = "Tags", PjValue = PjField.pjTaskText30, AzDORefName = WorkItemSystemFileds.Tags };
     }
 
     public class FieldPlanMapping
