@@ -278,8 +278,8 @@ namespace AzDOAddIn
                     string area = GetStringFieldValue(task, PlanCoreColumns.WIArea.PjValue);
                     string iteration = GetStringFieldValue(task, PlanCoreColumns.WIIteration.PjValue);
 
-                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area);
-                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration);
+                    if (!string.IsNullOrEmpty(area)) fields.Add(PlanCoreColumns.WIArea.AzDORefName, ActiveTeamProject + "\\\\" + area.Replace("\\", "\\\\"));
+                    if (!string.IsNullOrEmpty(iteration)) fields.Add(PlanCoreColumns.WIIteration.AzDORefName, ActiveTeamProject + "\\\\" + iteration.Replace("\\", "\\\\"));
 
                     var workItem = AzDORestApiHelper.PublishNewWorkItem(ActiveOrgUrl, ActiveTeamProject, ActivePAT, wiType, fields, parentId);
 
